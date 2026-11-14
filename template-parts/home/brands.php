@@ -22,7 +22,7 @@ $brands_page = fv_page_url_by_template( 'page-templates/brands.php' );
 				<p><?php esc_html_e( 'نمایندگی و تأمین مستقیم از تولیدکنندگان معتبر.', 'faucets-valves' ); ?></p>
 			</div>
 			<?php if ( $brands_page ) : ?>
-				<a class="link-arrow" href="<?php echo esc_url( $brands_page ); ?>"><?php esc_html_e( 'همهٔ برندها', 'faucets-valves' ); ?> <?php echo fv_icon( 'arrow' ); // phpcs:ignore ?></a>
+				<a class="link-more" href="<?php echo esc_url( $brands_page ); ?>"><?php esc_html_e( 'همهٔ برندها', 'faucets-valves' ); ?></a>
 			<?php endif; ?>
 		</div>
 		<?php get_template_part( 'template-parts/brand-grid', null, array( 'brands' => $brands ) ); ?>

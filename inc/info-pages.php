@@ -274,7 +274,7 @@ add_action( 'wp_enqueue_scripts', function () {
 } );
 
 /**
- * Page header shared by the info templates: plaster wall, pipe, title block.
+ * Page header shared by the info templates: a plaster band with the drawing title block.
  *
  * @param array $cells Pairs of [label, value].
  */
@@ -295,7 +295,6 @@ function fv_page_head( $cells = array() ) {
 				<?php endforeach; ?>
 			</div>
 		</div>
-		<span class="page-hero__pipe" aria-hidden="true"></span>
 	</header>
 	<?php
 }

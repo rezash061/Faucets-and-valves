@@ -1,7 +1,7 @@
 <?php
 /**
- * Single article: dark title band with the featured image (Cinematic Reveal), reading
- * column, tags, related guides.
+ * Single article: light header (breadcrumb, category chip, title, meta), the featured image in a
+ * rounded frame (Material Reveal), reading column, tags, related guides.
  *
  * @package FaucetsValves
  */
@@ -15,49 +15,34 @@ while ( have_posts() ) :
 	$cats = get_the_category();
 	?>
 	<article <?php post_class( 'article' ); ?>>
-		<header class="hero hero--slim hero--article" data-motion="cinematic">
-			<div class="hero__mask">
-				<?php
-				if ( has_post_thumbnail() ) {
-					the_post_thumbnail( 'fv-hero', array(
-						'class'         => 'hero__img',
-						'alt'           => '',
-						'loading'       => 'eager',
-						'fetchpriority' => 'high',
-						'sizes'         => '100vw',
-					) );
-				} else {
-					echo '<div class="hero__img hero__img--placeholder" aria-hidden="true"></div>';
-				}
-				?>
-			</div>
-			<div class="hero__shade" aria-hidden="true"></div>
-			<div class="container hero__content">
-				<p class="hero__eyebrow">
-					<?php
-					echo esc_html( $cats ? $cats[0]->name : __( 'مقاله', 'faucets-valves' ) );
-					?>
-				</p>
-				<h1 class="hero__title"><?php echo fv_split_words( get_the_title() ); // phpcs:ignore WordPress.Security.EscapeOutput ?></h1>
-				<p class="article__meta">
-					<time datetime="<?php echo esc_attr( get_the_date( 'c' ) ); ?>"><?php echo esc_html( get_the_date() ); ?></time>
-					<span aria-hidden="true">·</span>
-					<span>
-						<?php
-						/* translators: %s: minutes */
-						echo esc_html( sprintf( __( '%s دقیقه مطالعه', 'faucets-valves' ), number_format_i18n( fv_reading_time() ) ) );
-						?>
-					</span>
-				</p>
-			</div>
-		</header>
-
-		<div class="container article__body">
+		<header class="container article__head">
 			<?php
 			if ( function_exists( 'woocommerce_breadcrumb' ) ) {
 				woocommerce_breadcrumb();
 			}
 			?>
+			<p class="chip-label"><?php echo esc_html( $cats ? $cats[0]->name : __( 'مقاله', 'faucets-valves' ) ); ?></p>
+			<h1 class="article__title"><?php the_title(); ?></h1>
+			<p class="article__meta">
+				<time datetime="<?php echo esc_attr( get_the_date( 'c' ) ); ?>"><?php echo esc_html( get_the_date() ); ?></time>
+				<span aria-hidden="true">·</span>
+				<span>
+					<?php
+					/* translators: %s: minutes */
+					echo esc_html( sprintf( __( '%s دقیقه مطالعه', 'faucets-valves' ), number_format_i18n( fv_reading_time() ) ) );
+					?>
+				</span>
+			</p>
+		</header>
+		<?php if ( has_post_thumbnail() ) : ?>
+			<div class="container">
+				<figure class="article__figure material" data-motion="material">
+					<?php the_post_thumbnail( 'fv-hero', array( 'alt' => '', 'loading' => 'eager', 'fetchpriority' => 'high', 'sizes' => '(max-width: 1440px) 100vw, 1440px' ) ); ?>
+				</figure>
+			</div>
+		<?php endif; ?>
+
+		<div class="container article__body">
 			<?php if ( has_excerpt() ) : ?>
 				<p class="article__lead"><?php echo esc_html( get_the_excerpt() ); ?></p>
 			<?php endif; ?>

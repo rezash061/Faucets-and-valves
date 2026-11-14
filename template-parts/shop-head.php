@@ -1,8 +1,9 @@
 <?php
 /**
- * Shop / category / brand header: a plaster wall with the category's object, a copper pipe
- * running behind it, and a drawing title block (name, description, code count, connection note,
- * price range). Subcategories, or the main categories on the shop page, follow as drawers.
+ * Shop / category / brand header: a plaster band with the category's object standing on it and a
+ * drawing title block (name, description, code count, connection note). A category that is a room
+ * of the house takes that room's pastel tint, as the room does when picked in the 3D model.
+ * Subcategories, or the main categories on the shop page, follow as compact room blocks.
  *
  * @package FaucetsValves
  */
@@ -51,8 +52,9 @@ if ( ! $is_brand && taxonomy_exists( 'product_cat' ) ) {
 	}
 }
 $desc = $term ? wp_strip_all_tags( term_description( $term ) ) : '';
+$room = ( $term && 'product_cat' === $term->taxonomy && function_exists( 'fv_term_room' ) ) ? fv_room_class( fv_term_room( $term ) ) : '';
 ?>
-<header class="shop-hero surface-plaster<?php echo $img ? ' has-media' : ''; ?><?php echo $is_brand ? ' shop-hero--brand' : ''; ?>">
+<header class="shop-hero surface-plaster<?php echo $img ? ' has-media' : ''; ?><?php echo $is_brand ? ' shop-hero--brand' : ''; ?><?php echo $room ? ' has-room ' . esc_attr( $room ) : ''; ?>">
 	<div class="container shop-hero__inner">
 		<?php woocommerce_breadcrumb(); ?>
 		<div class="shop-hero__grid">
@@ -74,7 +76,6 @@ $desc = $term ? wp_strip_all_tags( term_description( $term ) ) : '';
 			<?php endif; ?>
 		</div>
 	</div>
-	<span class="shop-hero__pipe" aria-hidden="true"></span>
 </header>
 
 <?php if ( $drawers ) : ?>
@@ -83,17 +84,20 @@ $desc = $term ? wp_strip_all_tags( term_description( $term ) ) : '';
 			<?php foreach ( $drawers as $d ) : ?>
 				<?php $dimg = (int) get_term_meta( $d->term_id, 'thumbnail_id', true ); ?>
 				<li>
-					<a class="drawer" href="<?php echo esc_url( get_term_link( $d ) ); ?>">
-						<span class="drawer__handle" aria-hidden="true"></span>
-						<?php if ( $dimg ) : ?>
-							<span class="drawer__media"><?php echo wp_get_attachment_image( $dimg, 'thumbnail', false, array( 'alt' => '', 'loading' => 'lazy' ) ); ?></span>
-						<?php endif; ?>
-						<b><?php echo esc_html( $d->name ); ?></b>
-						<span>
-							<?php
-							/* translators: %s: number of products */
-							echo esc_html( sprintf( __( '%s کد', 'faucets-valves' ), number_format_i18n( $d->count ) ) );
-							?>
+					<a class="drawer <?php echo esc_attr( fv_room_class( fv_term_room( $d ) ) ); ?>" href="<?php echo esc_url( get_term_link( $d ) ); ?>">
+						<span class="drawer__media" aria-hidden="true">
+							<?php if ( $dimg ) : ?>
+								<?php echo wp_get_attachment_image( $dimg, 'thumbnail', false, array( 'alt' => '', 'loading' => 'lazy' ) ); ?>
+							<?php endif; ?>
+						</span>
+						<span class="drawer__text">
+							<b><?php echo esc_html( $d->name ); ?></b>
+							<span>
+								<?php
+								/* translators: %s: number of products */
+								echo esc_html( sprintf( __( '%s کد', 'faucets-valves' ), number_format_i18n( $d->count ) ) );
+								?>
+							</span>
 						</span>
 					</a>
 				</li>

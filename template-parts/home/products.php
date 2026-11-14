@@ -33,7 +33,7 @@ if ( false === strpos( $html, 'product-card' ) ) {
 				<h2 id="home-<?php echo esc_attr( $type ); ?>-title"><?php echo esc_html( $title ); ?></h2>
 				<p><?php echo esc_html( $sub ); ?></p>
 			</div>
-			<a class="link-arrow" href="<?php echo esc_url( $link ); ?>"><?php esc_html_e( 'مشاهدهٔ همه', 'faucets-valves' ); ?> <?php echo fv_icon( 'arrow' ); // phpcs:ignore ?></a>
+			<a class="link-more" href="<?php echo esc_url( $link ); ?>"><?php esc_html_e( 'مشاهدهٔ همه', 'faucets-valves' ); ?></a>
 		</div>
 		<?php echo $html; // phpcs:ignore WordPress.Security.EscapeOutput -- WooCommerce shortcode output. ?>
 	</div>

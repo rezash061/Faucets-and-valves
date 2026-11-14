@@ -168,3 +168,59 @@ function fv_reading_time( $post = null ) {
 	$words = count( preg_split( '/\s+/u', trim( $text ), -1, PREG_SPLIT_NO_EMPTY ) );
 	return max( 1, (int) ceil( $words / 200 ) );
 }
+
+/**
+ * Room of the 3D house a product category belongs to (kitchen, bath, wc, mech, yard), or ''.
+ * Reads the category's "place in the house" (room:<room> or spot:<room>.<fixture>) and walks up
+ * to its parents. Used only for presentation: cards and headers take their room's pastel tint.
+ *
+ * @param WP_Term|int $term Category term or ID.
+ */
+function fv_term_room( $term ) {
+	static $cache = array();
+	$term = get_term( $term, 'product_cat' );
+	if ( ! $term || is_wp_error( $term ) ) {
+		return '';
+	}
+	if ( isset( $cache[ $term->term_id ] ) ) {
+		return $cache[ $term->term_id ];
+	}
+	$room  = '';
+	$place = (string) get_term_meta( $term->term_id, 'fv_house', true );
+	if ( preg_match( '/^(?:room|spot):([a-z]+)/', $place, $m ) ) {
+		$room = $m[1];
+	} elseif ( $term->parent ) {
+		$room = fv_term_room( $term->parent );
+	}
+	$room = in_array( $room, array( 'kitchen', 'bath', 'wc', 'mech', 'yard' ), true ) ? $room : '';
+	$cache[ $term->term_id ] = $room;
+	return $room;
+}
+
+/**
+ * Room of a product: the first of its categories that has one.
+ *
+ * @param WC_Product $product Product.
+ */
+function fv_product_room( $product ) {
+	if ( ! $product || ! taxonomy_exists( 'product_cat' ) ) {
+		return '';
+	}
+	$id = $product->get_parent_id() ? $product->get_parent_id() : $product->get_id();
+	foreach ( wc_get_product_cat_ids( $id ) as $cat_id ) {
+		$room = fv_term_room( (int) $cat_id );
+		if ( $room ) {
+			return $room;
+		}
+	}
+	return '';
+}
+
+/**
+ * CSS class for a room tint ("room-bath"), or '' for no room.
+ *
+ * @param string $room Room key.
+ */
+function fv_room_class( $room ) {
+	return $room ? 'room-' . sanitize_html_class( $room ) : '';
+}

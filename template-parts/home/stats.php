@@ -1,6 +1,7 @@
 <?php
 /**
- * Stats band: four numbers that count up when they enter the viewport (data-motion="countup").
+ * Stats as a drawing title block: four cells whose numbers count up when they enter the viewport
+ * (data-motion="countup").
  * The final number is in the HTML, so it reads correctly without JavaScript.
  *
  * @package FaucetsValves
@@ -24,7 +25,7 @@ if ( ! $stats ) {
 	return;
 }
 ?>
-<section class="section section--showroom stats" aria-label="<?php esc_attr_e( 'به زبان اعداد', 'faucets-valves' ); ?>">
+<section class="section stats" aria-label="<?php esc_attr_e( 'به زبان اعداد', 'faucets-valves' ); ?>">
 	<div class="container">
 		<ul class="stats__list" data-motion="stagger">
 			<?php foreach ( $stats as $stat ) : ?>

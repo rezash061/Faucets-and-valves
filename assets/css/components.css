@@ -1,48 +1,127 @@
-/* Components: buttons, section heads, hero, category tiles. */
+/* Components: buttons, section heads, title block, pill, room blocks (category drawers), classic hero. */
 
-/* ---------- Buttons ---------- */
-.btn, .button, button.button, a.button, input[type="submit"] {
+/* ---------- Buttons: ink pill (primary) and outlined pill (secondary) ---------- */
+.btn, .button, button.button, a.button, input[type="submit"],
+.woocommerce a.button, .woocommerce button.button, .woocommerce input.button {
 	display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-	min-height: 52px; padding: 0 28px; border: 1px solid transparent; border-radius: var(--radius);
-	font-size: 15px; font-weight: 500; line-height: 1.2; cursor: pointer;
-	transition: background-color var(--dur-fast), color var(--dur-fast), border-color var(--dur-fast);
+	min-height: 48px; padding: 0 24px; margin: 0;
+	border: 1px solid var(--field-border); border-radius: var(--radius-pill);
+	background: transparent; color: var(--heading);
+	font-family: var(--font-sans); font-size: 15px; font-weight: 500; line-height: 1.2; text-decoration: none; cursor: pointer;
+	transition: background-color var(--dur-fast), color var(--dur-fast), border-color var(--dur-fast), box-shadow var(--dur-fast);
 }
-.btn .icon { width: 18px; height: 18px; }
-.btn--brass, .button.alt, button.button.alt, input[type="submit"] { background: var(--accent); color: var(--accent-contrast); }
-.btn--brass:hover, .button.alt:hover { background: var(--c-brass-300); color: var(--c-graphite-950); }
-.section--catalog .btn--brass:hover, .surface-catalog .button.alt:hover { background: var(--c-brass-800); color: #fff; }
-.btn--ghost, .button { background: transparent; color: var(--heading); border-color: var(--border); }
-.btn--ghost { border-color: rgb(242 240 236 / .35); }
-.btn--ghost:hover, .button:hover { border-color: var(--heading); }
+.btn .icon, .button .icon { width: 18px; height: 18px; }
+.btn:hover, .button:hover, .woocommerce a.button:hover, .woocommerce button.button:hover, .woocommerce input.button:hover {
+	border-color: var(--heading); background: rgb(29 35 38 / .04); color: var(--heading);
+}
+.btn--brass, .btn--primary, .button.alt, input[type="submit"],
+.woocommerce a.button.alt, .woocommerce button.button.alt, .woocommerce input.button.alt {
+	background: var(--c-ink); border-color: var(--c-ink); color: var(--c-paper);
+}
+.btn--brass:hover, .btn--primary:hover, .button.alt:hover, input[type="submit"]:hover,
+.woocommerce a.button.alt:hover, .woocommerce button.button.alt:hover, .woocommerce input.button.alt:hover {
+	background: var(--c-ink-3); border-color: var(--c-ink-3); color: var(--c-paper);
+}
+.woocommerce a.button.disabled, .woocommerce button.button:disabled, .woocommerce button.button:disabled[disabled],
+.woocommerce button.button.alt.disabled { opacity: .45; padding: 0 24px; }
+.btn--ghost { background: transparent; }
+.surface-showroom .btn--ghost, .hero .btn--ghost { border-color: rgb(242 241 236 / .35); }
 
 /* ---------- Sections ---------- */
 .section { padding-block: var(--section-y); background: var(--bg); color: var(--text); }
-.section-head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--s3); margin-bottom: var(--s5); }
-.section-head h2 { margin: 0; font-weight: 300; font-size: clamp(28px, 3.4vw, 44px); color: var(--heading); }
-.section-head p { margin: var(--s1) 0 0; color: var(--text-muted); }
-.link-arrow { display: inline-flex; gap: 8px; align-items: center; min-height: 44px; color: var(--accent); font-weight: 500; white-space: nowrap; }
-.link-arrow .icon { width: 18px; height: 18px; transition: transform .25s var(--ease-out); }
-.link-arrow:hover .icon { transform: translateX(-4px); }
+.section--plaster { background: var(--c-plaster); }
+.section + .section:not(.section--plaster) { padding-top: 0; } /* Paper sections flow into each other. */
+.section--plaster + .section:not(.section--plaster) { padding-top: var(--section-y); }
+.section-head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--s3); margin-bottom: var(--s4); }
+.section-head h2 { margin: 0; font-weight: 300; font-size: clamp(28px, 3.2vw, 42px); color: var(--heading); }
+.section-head p { margin: var(--s1) 0 0; color: var(--text-muted); font-family: var(--font-read); }
 
-/* ---------- Hero (01 Cinematic Reveal) ---------- */
+/* "See all" link: a quiet outlined pill, no arrow */
+.link-more {
+	display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; flex: none;
+	border-radius: var(--radius-pill); box-shadow: inset 0 0 0 1px var(--field-border);
+	color: var(--heading); font-size: var(--fs-sm); font-weight: 500; white-space: nowrap;
+	transition: box-shadow var(--dur-fast), background-color var(--dur-fast);
+}
+.link-more:hover { box-shadow: inset 0 0 0 1px var(--c-ink); background: var(--c-clay-lit); }
+
+/* ---------- Drawing title block (front page hero, shop/page headers, stats) ---------- */
+.titleblock {
+	position: relative; z-index: 4; width: min(430px, 100%);
+	border: var(--line-block); background: var(--c-paper);
+	display: grid; grid-template-columns: repeat(3, 1fr); box-shadow: 0 10px 30px rgb(0 0 0 / .08);
+}
+.titleblock .tb-main { grid-column: 1 / -1; padding: 18px 18px 14px; }
+.titleblock h1 { margin: 0; font-size: clamp(28px, 2.7vw, 40px); font-weight: 300; line-height: 1.25; letter-spacing: -.01em; color: var(--c-ink); }
+.titleblock h1 .w { display: inline-block; overflow: hidden; vertical-align: top; padding-block: .25em; margin-block: -.25em; }
+.titleblock h1 .w > span { display: inline-block; }
+.titleblock p { margin: 8px 0 0; font-family: var(--font-read); font-size: 15px; line-height: 1.9; color: var(--c-ink-2); }
+.tb-cell { padding: 8px 14px; border-top: var(--line-ink); border-inline-start: var(--line-ink); font-size: 12px; color: var(--c-ink-2); line-height: 1.5; }
+.tb-main + .tb-cell { border-inline-start: 0; }
+.tb-cell b { display: block; color: var(--c-ink); font-size: 14px; font-weight: 600; }
+
+/* ---------- Pill button (house room card, contact form) ---------- */
+.pill {
+	display: inline-grid; place-items: center; height: 54px; padding-inline: 30px; border: 0; border-radius: 27px;
+	background: var(--c-ink); color: var(--c-paper); font-weight: 600; font-size: 16px; transition: background-color .2s;
+}
+.pill:hover { background: var(--c-ink-3); }
+
+/* ---------- Room blocks: categories as clay blocks with their room's floor tint ---------- */
+.drawers { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s2); }
+.drawer {
+	display: flex; flex-direction: column; gap: 2px; height: 100%; padding: 10px 10px 16px; border-radius: var(--r-2);
+	background: var(--c-clay-lit); color: var(--c-ink); box-shadow: var(--sh-1);
+	transition: transform var(--dur) var(--ease-out), box-shadow var(--dur), background-color var(--dur);
+}
+.drawer__media {
+	display: grid; place-items: center; aspect-ratio: 16 / 10; margin-bottom: 12px; overflow: hidden; border-radius: var(--r-1);
+	background: var(--tint-wash); transition: background-color var(--dur);
+}
+.drawer__media img {
+	height: 100%; width: auto; max-width: 70%; object-fit: contain; mix-blend-mode: multiply;
+	-webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 62%, transparent 100%);
+	mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 62%, transparent 100%);
+}
+.drawer b { display: flex; align-items: center; gap: 8px; padding-inline: 8px; font-size: 19px; font-weight: 500; line-height: 1.45; }
+.drawer b::before { content: ""; flex: none; width: 9px; height: 9px; border-radius: 3px; background: var(--tint-deep); } /* the room's colour key */
+.drawer > span:last-child { padding-inline: 8px; font-family: var(--font-read); color: var(--c-ink-2); font-size: 14px; }
+.drawer:hover, .drawer:focus-visible { transform: translateY(-2px); box-shadow: var(--sh-2); background: var(--tint-wash); }
+.drawer:hover .drawer__media, .drawer:focus-visible .drawer__media { background: var(--tint); }
+.drawer:focus-visible { outline-offset: 4px; }
+
+.drawers--compact { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+.drawers--compact .drawer { flex-direction: row; align-items: center; gap: 12px; padding: 8px; padding-inline-end: 14px; }
+.drawers--compact .drawer__media { flex: none; width: 64px; aspect-ratio: 1; margin: 0; }
+.drawers--compact .drawer__media img { max-width: 100%; }
+.drawers--compact .drawer > .drawer__text { display: flex; flex-direction: column; min-width: 0; padding: 0; font-family: var(--font-sans); font-size: inherit; }
+.drawers--compact .drawer b { padding: 0; font-size: 16px; }
+.drawers--compact .drawer b::before { width: 7px; height: 7px; }
+.drawers--compact .drawer__text > span { font-size: 13px; color: var(--c-ink-2); font-family: var(--font-read); }
+
+@media (max-width: 900px) {
+	.drawers { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+	.drawer b { font-size: 16px; padding-inline: 4px; }
+	.drawer > span:last-child { padding-inline: 4px; font-size: 13px; }
+	.drawers--compact { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* ---------- Classic image hero (only without WooCommerce, and the showroom page template) ---------- */
 .hero {
 	position: relative; overflow: hidden; display: flex; align-items: flex-end;
-	min-height: max(640px, 100svh); background: var(--c-graphite-950); color: var(--text);
+	min-height: max(640px, 100svh); background: var(--c-ink); color: var(--text);
 }
 .hero--slim { min-height: clamp(380px, 56svh, 560px); padding-top: var(--header-h); }
 .hero__mask { position: absolute; inset: 0; overflow: hidden; }
 .hero__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform-origin: 30% 50%; }
-.hero__img--placeholder { background: radial-gradient(ellipse at 30% 45%, #2b2a28 0%, #121213 60%, #0b0b0c 100%); }
+.hero__img--placeholder { background: var(--c-ink); }
 .hero__shade {
 	position: absolute; inset: 0; pointer-events: none;
-	background:
-		linear-gradient(to left, rgb(14 14 15 / .92) 0%, rgb(14 14 15 / .55) 45%, rgb(14 14 15 / .1) 100%),
-		linear-gradient(to top, rgb(14 14 15 / .9) 0%, transparent 45%);
+	background: linear-gradient(to left, rgb(29 35 38 / .9) 0%, rgb(29 35 38 / .5) 45%, rgb(29 35 38 / .1) 100%);
 }
 .hero__content { position: relative; z-index: 2; width: 100%; padding-block: var(--s7) clamp(64px, 12vh, 128px); }
 .hero--slim .hero__content { padding-block: var(--s5); }
-.hero__eyebrow { display: inline-flex; align-items: center; gap: 12px; margin: 0 0 var(--s3); color: var(--accent); font-size: var(--fs-sm); font-weight: 500; letter-spacing: .08em; }
-.hero__eyebrow::before { content: ""; width: 40px; height: 1px; background: currentColor; }
+.hero__eyebrow { margin: 0 0 var(--s3); color: var(--accent); font-size: var(--fs-sm); font-weight: 500; }
 .hero__title { margin: 0; color: var(--heading); font-weight: 200; font-size: var(--fs-hero); line-height: 1.25; max-width: 12ch; }
 .hero--slim .hero__title { font-size: var(--fs-3xl); max-width: 18ch; }
 .hero__title .w { display: inline-block; overflow: hidden; vertical-align: top; padding-block: .08em; margin-block: -.08em; }
@@ -52,61 +131,28 @@
 .hero--slim .hero__sub { margin-bottom: 0; }
 .hero__ctas { display: flex; flex-wrap: wrap; gap: var(--s2); }
 
-/* ---------- Category tiles ---------- */
+/* Legacy category tiles (kept for child themes; the front page uses room blocks) */
 .cat-tiles { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--s2); }
-.cat-tile { position: relative; display: block; color: var(--heading); }
+.cat-tile { position: relative; display: block; color: var(--heading); border-radius: var(--r-2); overflow: hidden; box-shadow: var(--sh-1); background: var(--c-clay-lit); }
 .cat-tile__media { display: block; aspect-ratio: 3 / 4; background: var(--bg-media); }
-.cat-tile__media img { width: 100%; height: 100%; object-fit: cover; transition: transform .9s var(--ease-out); }
-.cat-tile:hover .cat-tile__media img { transform: scale(1.04); }
-.cat-tile__label { position: absolute; inset-inline: 0; bottom: 0; z-index: 2; padding: var(--s3); background: linear-gradient(to top, rgb(14 14 15 / .85), transparent); }
-.cat-tile__label b { display: block; font-weight: 500; font-size: 19px; }
-.cat-tile__label span { font-size: var(--fs-xs); color: var(--c-steel-300); }
+.cat-tile__media img { width: 100%; height: 100%; object-fit: cover; }
+.cat-tile__label { display: block; padding: var(--s2); }
+.cat-tile__label b { display: block; font-weight: 500; font-size: 18px; }
+.cat-tile__label span { font-size: var(--fs-xs); color: var(--text-muted); }
 
 @media (max-width: 1023px) {
 	.cat-tiles { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 767px) {
-	.section-head { flex-direction: column; align-items: flex-start; }
-	.hero__shade { background: linear-gradient(to top, rgb(14 14 15 / .97) 0%, rgb(14 14 15 / .8) 50%, rgb(14 14 15 / .2) 85%); }
+	.section-head { flex-direction: column; align-items: flex-start; gap: var(--s2); }
+	.hero__shade { background: linear-gradient(to top, rgb(29 35 38 / .95) 0%, rgb(29 35 38 / .75) 50%, rgb(29 35 38 / .2) 85%); }
 	.hero__img { object-position: 20% 30%; }
 	.btn { min-height: 48px; padding: 0 20px; }
 }
-
-
-/* ---------- Drawing title block (front page, shop header, product facts) ---------- */
-.titleblock {
-	position: relative; z-index: 4; width: min(430px, 100%);
-	border: 1.5px solid var(--c-ink); background: var(--c-paper);
-	display: grid; grid-template-columns: repeat(3, 1fr); box-shadow: 0 10px 30px rgb(0 0 0 / .08);
+@media (max-width: 600px) {
+	.drawers--compact { gap: 8px; }
+	.drawers--compact .drawer { gap: 10px; padding: 6px; padding-inline-end: 10px; }
+	.drawers--compact .drawer__media { width: 48px; }
+	.drawers--compact .drawer b { font-size: 14px; line-height: 1.4; }
+	.drawers--compact .drawer__text > span { font-size: 12px; }
 }
-.titleblock .tb-main { grid-column: 1 / -1; padding: 18px 18px 14px; }
-.titleblock h1 { margin: 0; font-size: clamp(28px, 2.7vw, 40px); font-weight: 300; line-height: 1.25; letter-spacing: -.01em; color: var(--c-ink); }
-.titleblock h1 .w { display: inline-block; overflow: hidden; vertical-align: top; padding-block: .25em; margin-block: -.25em; }
-.titleblock h1 .w > span { display: inline-block; }
-.titleblock p { margin: 8px 0 0; font-family: var(--font-read); font-size: 15px; line-height: 1.9; color: var(--c-ink-2); }
-.tb-cell { padding: 8px 14px; border-top: 1px solid var(--c-ink); border-inline-start: 1px solid var(--c-ink); font-size: 12px; color: var(--c-ink-2); line-height: 1.5; }
-.tb-main + .tb-cell { border-inline-start: 0; }
-.tb-cell b { display: block; color: var(--c-ink); font-size: 14px; font-weight: 600; }
-
-
-/* ---------- Pill button ---------- */
-.pill {
-	display: inline-grid; place-items: center; height: 54px; padding-inline: 30px; border-radius: 27px;
-	background: var(--c-ink); color: var(--c-paper); font-weight: 600; font-size: 16px; transition: background-color .2s;
-}
-.pill:hover { background: var(--c-copper-text); }
-
-/* ---------- Warehouse drawers (all categories) ---------- */
-.drawers { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-.drawer {
-	display: grid; grid-template-rows: auto 1fr auto auto; gap: 6px; min-height: 220px; padding: 18px 22px 22px; border-radius: var(--radius);
-	background: linear-gradient(180deg, #e9e8e3, #dcdad4); color: var(--c-ink);
-	box-shadow: inset 0 1px 0 #fff, inset 0 -2px 0 rgb(0 0 0 / .06), 0 1px 2px rgb(0 0 0 / .08);
-	transition: transform .3s var(--ease-out), box-shadow .3s;
-}
-.drawer:hover { transform: translateY(-3px); box-shadow: inset 0 1px 0 #fff, 0 10px 24px rgb(29 35 38 / .12); }
-.drawer__handle { justify-self: center; width: 56px; height: 8px; border-radius: 4px; background: linear-gradient(180deg, #f5f6f7, #9ba1a7); box-shadow: 0 1px 2px rgb(0 0 0 / .25); margin-bottom: 8px; }
-.drawer__media img { height: 120px; width: auto; margin-inline: auto; object-fit: contain; mix-blend-mode: multiply; -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 60%, transparent 100%); mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 60%, transparent 100%); }
-.drawer b { font-size: 22px; font-weight: 400; }
-.drawer > span:last-child { font-family: var(--font-read); color: var(--c-ink-2); font-size: 15px; }
-@media (max-width: 900px) { .drawers { grid-template-columns: 1fr 1fr; } .drawer b { font-size: 18px; } }

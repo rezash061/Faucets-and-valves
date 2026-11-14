@@ -1,4 +1,7 @@
-/* Design tokens — Faucets & Valves, v0.5 "plaster & copper". Contrast pairs checked against WCAG AA (4.5:1). */
+/* Design tokens — Faucets & Valves, v0.7 "clay house".
+   One quiet system taken from the home page model: white clay objects on warm plaster, soft contact
+   shadows, ink linework, paper chips, a single water-blue accent and pastel room tints.
+   Contrast pairs checked against WCAG AA (4.5:1) on paper, clay and plaster. */
 /* Estedad (OFL) for interface and headings; Noto Naskh Arabic (OFL) for reading text.
    A digits-only face maps 0-9 to Persian digits everywhere; codes use --font-code and keep Latin digits. */
 @font-face { font-family: "Estedad"; src: url("../fonts/Estedad.woff2") format("woff2"); font-weight: 100 900; font-style: normal; font-display: swap; }
@@ -6,35 +9,53 @@
 @font-face { font-family: "Naskh"; src: url("../fonts/Naskh.woff2") format("woff2"); font-weight: 400 700; font-display: swap; }
 
 :root {
-	/* Primitive colors */
-	--c-plaster: #D8D5CE;     /* wall behind the pipes */
+	/* ---- Primitive colors ---- */
+	--c-plaster: #D8D5CE;     /* the ground the house stands on: headers, footer, bands */
 	--c-plaster-2: #C9C6BE;
-	--c-paper: #F2F1EC;       /* sheets, catalog surface */
+	--c-plaster-lit: #E4E1DA; /* lit plaster, centre of the hero's radial */
+	--c-paper: #F2F1EC;       /* page ground */
 	--c-paper-raised: #FAF9F6;
-	--c-ink: #1D2326;         /* text on paper: 14.6:1 */
-	--c-ink-2: #55606A;       /* secondary on paper: 5.9:1 */
-	--c-ink-3: #262E32;
-	--c-copper: #B8693B;      /* decorative copper (pipes, rules) */
-	--c-copper-text: #8E4A22; /* copper as text/accent on paper: 6.3:1 */
-	--c-copper-light: #E0A178;/* copper on ink: 7.6:1 */
-	--c-water: #2F7FC7;       /* water, fills */
-	--c-water-text: #1F5F96;  /* links/active on paper: 6.2:1 */
-	--c-brass: #C9A55C;
-	--c-steel-300: #C9CED1;   /* body on ink: 10.6:1 */
-	--c-steel-500: #98A1A8;   /* secondary on ink: 5.8:1 */
+	--c-clay: #F3F2EE;        /* the model's matte white */
+	--c-clay-lit: #FBFAF7;    /* lit face of a clay block: cards, panels */
+	--c-clay-shade: #ECEAE5;  /* clay in shade: media grounds, sunken wells */
+	--c-ink: #1D2326;         /* text on paper: 14.1:1, on plaster 10.9:1 */
+	--c-ink-2: #4C565F;       /* secondary: 6.6:1 on paper, 5.1:1 on plaster */
+	--c-ink-3: #2E383D;       /* ink, one step lighter (button hover) */
+	--c-water: #2F7FC7;       /* water fill */
+	--c-water-text: #1F5F96;  /* the single accent: dots, current state, links, focus. 5.9:1 on paper */
 	--c-danger: #B42318;
 	--c-success: #15803D;
-	/* Legacy names kept so older rules keep working */
-	--c-brass-400: var(--c-copper-light);
-	--c-brass-700: var(--c-copper-text);
+	--c-steel-300: #C9CED1;
+	--c-steel-500: #98A1A8;
+	/* Real metal. Only for finish samples and swatches, never for UI chrome. */
+	--c-copper: #B8693B;
+	--c-copper-text: #8E4A22;
+	--c-copper-light: #E0A178;
+	--c-brass: #C9A55C;
+
+	/* ---- Rooms of the house (floor tint / furniture tint / wash 28% and soft 55% on clay) ---- */
+	--room-kitchen: #DCB999; --room-kitchen-deep: #B07A52; --room-kitchen-wash: #F2E8DD; --room-kitchen-soft: #EAD6C3;
+	--room-bath: #9CC3DD;    --room-bath-deep: #5E9BC7;    --room-bath-wash: #E0EBF0; --room-bath-soft: #C7DCE9;
+	--room-wc: #A7CFC4;      --room-wc-deep: #6FAE9F;      --room-wc-wash: #E3EEE9; --room-wc-soft: #CDE2DB;
+	--room-mech: #D9C58C;    --room-mech-deep: #C9A55C;    --room-mech-wash: #F1EBD9; --room-mech-soft: #E8DDBC;
+	--room-yard: #C4D6AB;    --room-yard-deep: #6E9B5A;    --room-yard-wash: #ECF0E2; --room-yard-soft: #DDE6CD;
+	--room-none: #DAD7D0;    --room-none-deep: #8A8F93;    --room-none-wash: #F0EEE9; --room-none-soft: #E8E6E0;
+
+	/* Legacy names kept so older rules and plugins keep working */
+	--c-brass-300: var(--c-ink-3);
+	--c-brass-400: var(--c-ink);
+	--c-brass-700: var(--c-ink);
+	--c-brass-800: var(--c-ink);
 	--c-graphite-950: var(--c-ink);
+	--c-ivory-50: var(--c-paper);
 	--c-stone-50: var(--c-paper);
-	--c-stone-100: #E9E7E1;
+	--c-stone-100: var(--c-clay-shade);
+	--c-stone-200: var(--c-clay-shade);
 	--c-stone-300: #CFCCC4;
 	--c-ink-900: var(--c-ink);
 	--c-ink-600: var(--c-ink-2);
 
-	/* Type */
+	/* ---- Type ---- */
 	--font-sans: "FV Digits", "Estedad", Tahoma, system-ui, sans-serif;
 	--font-read: "FV Digits", "Naskh", "Estedad", Tahoma, serif;
 	--font-code: "Estedad", Tahoma, sans-serif; /* Latin digits for product codes */
@@ -51,7 +72,7 @@
 	--lh-body: 1.8;     /* Persian needs more leading than Latin. */
 	--lh-tight: 1.3;
 
-	/* Spacing (spacious scale) */
+	/* ---- Spacing ---- */
 	--s1: 8px;
 	--s2: 16px;
 	--s3: 24px;
@@ -59,45 +80,72 @@
 	--s5: 48px;
 	--s6: 64px;
 	--s7: 96px;
-	--section-y: clamp(64px, 10vw, 128px);
+	--section-y: clamp(64px, 9vw, 120px);
 
-	/* Layout */
+	/* ---- Layout ---- */
 	--max: 1440px;
 	--content: 760px;
 	--gutter: clamp(16px, 4vw, 48px);
 	--header-h: 76px;
 	--mobile-bar-h: 64px;
 
-	/* Shape */
-	--radius: 6px;
+	/* ---- Shape ---- */
+	--r-1: 8px;    /* chips, inputs, thumbnails */
+	--r-2: 14px;   /* cards, panels */
+	--r-3: 20px;   /* large media, sheets */
+	--radius: var(--r-1);
+	--radius-input: var(--r-1);
 	--radius-pill: 999px;
-	--radius-input: 2px;
-	--hairline: 1px solid var(--c-stone-300);
-	--shadow-sheet: 0 20px 60px rgb(29 35 38 / .16);
 
-	/* Motion */
+	/* ---- Lines (ink linework from the title block and labels) ---- */
+	--line-color: rgb(29 35 38 / .12);
+	--hairline: 1px solid var(--line-color);
+	--line-ink: 1px solid var(--c-ink);
+	--line-block: 1.5px solid var(--c-ink);
+
+	/* ---- Shadows: by level, warm-ink and diffuse like the model's ---- */
+	--sh-edge: 0 0 0 1px rgb(29 35 38 / .05);
+	--sh-1: 0 0 0 1px rgb(29 35 38 / .05), 0 1px 2px rgb(29 35 38 / .05), 0 4px 14px -4px rgb(29 35 38 / .08);
+	--sh-2: 0 0 0 1px rgb(29 35 38 / .04), 0 2px 4px rgb(29 35 38 / .04), 0 16px 32px -10px rgb(29 35 38 / .18);
+	--sh-3: 0 24px 64px -12px rgb(29 35 38 / .28);
+	--shadow-sheet: var(--sh-3);
+
+	/* ---- Motion ---- */
 	--ease-out: cubic-bezier(.16, 1, .3, 1);
 	--dur-fast: 200ms;
+	--dur: 320ms;
 
-	/* Semantic (paper is the default surface) */
+	/* ---- Semantic (paper is the default surface) ---- */
 	--bg: var(--c-paper);
-	--bg-raised: var(--c-paper-raised);
-	--bg-media: #E9E7E1;
+	--bg-raised: var(--c-clay-lit);
+	--bg-media: var(--c-clay-shade);
 	--text: var(--c-ink);
 	--text-muted: var(--c-ink-2);
 	--heading: var(--c-ink);
-	--accent: var(--c-copper-text);
+	--accent: var(--c-water-text);
 	--accent-contrast: #FFFFFF;
 	--link: var(--c-water-text);
-	--border: var(--c-stone-300);
+	--border: var(--line-color);
+	--field-border: rgb(29 35 38 / .22);
 	--focus: var(--c-water-text);
+
+	/* Room tint in use (set by .room-*) */
+	--tint: var(--room-none);
+	--tint-deep: var(--room-none-deep);
+	--tint-wash: var(--room-none-wash);
+	--tint-soft: var(--room-none-soft);
 }
 
-/* Ink (dark) surface: footer, mobile bar and showroom bands. The header is on plaster now. */
+/* Room tints: any element can take a room; children read --tint, --tint-deep and --tint-wash. */
+.room-kitchen { --tint: var(--room-kitchen); --tint-deep: var(--room-kitchen-deep); --tint-wash: var(--room-kitchen-wash); --tint-soft: var(--room-kitchen-soft); }
+.room-bath    { --tint: var(--room-bath);    --tint-deep: var(--room-bath-deep);    --tint-wash: var(--room-bath-wash); --tint-soft: var(--room-bath-soft); }
+.room-wc      { --tint: var(--room-wc);      --tint-deep: var(--room-wc-deep);      --tint-wash: var(--room-wc-wash); --tint-soft: var(--room-wc-soft); }
+.room-mech    { --tint: var(--room-mech);    --tint-deep: var(--room-mech-deep);    --tint-wash: var(--room-mech-wash); --tint-soft: var(--room-mech-soft); }
+.room-yard    { --tint: var(--room-yard);    --tint-deep: var(--room-yard-deep);    --tint-wash: var(--room-yard-wash); --tint-soft: var(--room-yard-soft); }
+
+/* Ink (dark) surface: only the "showroom" page template (named as dark in the editor) and the
+   classic image hero used when WooCommerce is off. Everything else is paper, clay and plaster. */
 .surface-showroom,
-.section--showroom,
-.mobile-bar,
-.site-footer,
 .hero {
 	--bg: var(--c-ink);
 	--bg-raised: var(--c-ink-3);
@@ -105,38 +153,39 @@
 	--text: var(--c-steel-300);
 	--text-muted: var(--c-steel-500);
 	--heading: var(--c-paper);
-	--accent: var(--c-copper-light);
+	--accent: #9CC3DD;
 	--accent-contrast: var(--c-ink);
-	--link: var(--c-copper-light);
-	--border: rgb(255 255 255 / .1);
-	--focus: var(--c-copper-light);
+	--link: #9CC3DD;
+	--border: rgb(255 255 255 / .12);
+	--focus: #9CC3DD;
 }
 
-/* Plaster surface: header, nav drawer, the pipe scene */
-.site-header,
-.nav-drawer,
-.surface-plaster {
-	--bg: var(--c-plaster);
-	--bg-raised: var(--c-paper);
+/* Light sections inside a dark showroom page switch back to paper */
+.section--catalog {
+	--bg: var(--c-paper);
+	--bg-raised: var(--c-clay-lit);
+	--bg-media: var(--c-clay-shade);
 	--text: var(--c-ink);
 	--text-muted: var(--c-ink-2);
 	--heading: var(--c-ink);
-	--accent: var(--c-copper-text);
+	--accent: var(--c-water-text);
 	--accent-contrast: #FFFFFF;
-	--border: rgb(29 35 38 / .16);
+	--link: var(--c-water-text);
+	--border: var(--line-color);
 	--focus: var(--c-water-text);
 }
 
-/* Catalog sections inside a showroom page switch back to light */
-.section--catalog {
-	--bg: var(--c-paper);
-	--bg-raised: var(--c-paper-raised);
-	--bg-media: var(--c-stone-100);
-	--text: var(--c-ink-900);
-	--text-muted: var(--c-ink-600);
-	--heading: var(--c-ink-900);
-	--accent: var(--c-brass-700);
-	--accent-contrast: #FFFFFF;
-	--border: var(--c-stone-300);
-	--focus: var(--c-brass-700);
+/* Plaster surface: header, footer, nav drawer, page headers, plaster bands */
+.section--plaster,
+.site-header,
+.site-footer,
+.nav-drawer,
+.surface-plaster {
+	--bg: var(--c-plaster);
+	--bg-raised: var(--c-clay-lit);
+	--bg-media: var(--c-clay-shade);
+	--text: var(--c-ink);
+	--text-muted: var(--c-ink-2);
+	--heading: var(--c-ink);
+	--border: rgb(29 35 38 / .16);
 }

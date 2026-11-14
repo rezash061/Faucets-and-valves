@@ -26,7 +26,7 @@ $blog = get_option( 'page_for_posts' ) ? get_permalink( get_option( 'page_for_po
 				<p><?php esc_html_e( 'انتخاب، نصب و نگهداری شیرآلات.', 'faucets-valves' ); ?></p>
 			</div>
 			<?php if ( $blog ) : ?>
-				<a class="link-arrow" href="<?php echo esc_url( $blog ); ?>"><?php esc_html_e( 'همهٔ مقالات', 'faucets-valves' ); ?> <?php echo fv_icon( 'arrow' ); // phpcs:ignore ?></a>
+				<a class="link-more" href="<?php echo esc_url( $blog ); ?>"><?php esc_html_e( 'همهٔ مقالات', 'faucets-valves' ); ?></a>
 			<?php endif; ?>
 		</div>
 		<ul class="post-grid" data-motion="stagger">

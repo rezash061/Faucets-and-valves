@@ -1,7 +1,7 @@
 <?php
 /**
- * "One design, several finishes": large metal sample tiles, one per finish term.
- * Each tile is a CSS metal surface with Material Reveal, linking to the shop filtered by
+ * "One design, several finishes": clay cards on the plaster ground, each holding one small round
+ * metal sample (the only real-metal colour outside product photos), linking to the shop filtered by
  * that finish. Needs the global attribute "finish" (pa_finish).
  *
  * @package FaucetsValves
@@ -18,7 +18,7 @@ if ( is_wp_error( $terms ) || count( $terms ) < 2 ) {
 }
 $shop = wc_get_page_permalink( 'shop' );
 ?>
-<section class="section section--showroom finishes" aria-labelledby="finishes-title">
+<section class="section section--plaster finishes" aria-labelledby="finishes-title">
 	<div class="container">
 		<div class="section-head">
 			<div>
@@ -34,7 +34,7 @@ $shop = wc_get_page_permalink( 'shop' );
 				?>
 				<li>
 					<a class="finish-tile" href="<?php echo esc_url( $url ); ?>">
-						<span class="finish-tile__surface material surface--<?php echo esc_attr( $swatch ? $swatch : 'steel' ); ?>" data-motion="material" aria-hidden="true"></span>
+						<span class="finish-tile__sample surface--<?php echo esc_attr( $swatch ? $swatch : 'steel' ); ?>" aria-hidden="true"></span>
 						<span class="finish-tile__label">
 							<b><?php echo esc_html( $term->name ); ?></b>
 							<span>
@@ -44,7 +44,6 @@ $shop = wc_get_page_permalink( 'shop' );
 								?>
 							</span>
 						</span>
-						<?php echo fv_icon( 'arrow', 'finish-tile__arrow' ); // phpcs:ignore ?>
 					</a>
 				</li>
 			<?php endforeach; ?>
