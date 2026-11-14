@@ -118,7 +118,7 @@
 /* 404: the number sits in a title block, like a drawing's sheet number */
 .not-found { display: flex; flex-direction: column; align-items: center; text-align: center; }
 .not-found__code {
-	margin: 0 0 var(--s4); padding: 6px 28px 10px; border: var(--line-block); background: var(--c-clay-lit);
+	margin: 0 0 var(--s4); padding: 6px 28px 10px; border: 0; border-radius: var(--r-2); box-shadow: var(--sh-1); overflow: hidden; background: var(--c-clay-lit);
 	font-size: clamp(56px, 9vw, 104px); font-weight: 200; line-height: 1.1; color: var(--c-ink);
 }
 .not-found > p { color: var(--text-muted); }
@@ -131,10 +131,10 @@
 .site-footer { background: var(--c-plaster); color: var(--text); padding: var(--s5) 0 var(--s4); margin-top: 0; }
 
 /* Trust strip as a title block */
-.trust-strip { display: grid; grid-template-columns: repeat(4, 1fr); border: var(--line-block); background: var(--c-clay-lit); }
-.trust-strip > div { display: grid; grid-template-columns: auto 1fr; column-gap: 14px; align-items: center; padding: var(--s2) var(--s3); border-inline-start: var(--line-ink); }
+.trust-strip { display: grid; grid-template-columns: repeat(4, 1fr); background: var(--c-clay-lit); border-radius: var(--r-2); box-shadow: var(--sh-1); overflow: hidden; }
+.trust-strip > div { display: grid; grid-template-columns: auto 1fr; column-gap: 14px; align-items: center; padding: var(--s3); border-inline-start: var(--hairline); }
 .trust-strip > div:first-child { border-inline-start: 0; }
-.trust-strip .icon { grid-row: span 2; width: 26px; height: 26px; color: var(--c-ink); }
+.trust-strip .icon { grid-row: span 2; width: 22px; height: 22px; padding: 11px; box-sizing: content-box; border-radius: 50%; background: var(--c-clay-shade); color: var(--c-ink); }
 .trust-strip b { color: var(--heading); font-weight: 600; font-size: 15px; }
 .trust-strip span { font-size: var(--fs-xs); color: var(--text-muted); }
 
@@ -163,7 +163,7 @@
 	.footer-grid { grid-template-columns: 1fr 1fr; }
 	.trust-strip { grid-template-columns: repeat(2, 1fr); }
 	.trust-strip > div:nth-child(3) { border-inline-start: 0; }
-	.trust-strip > div:nth-child(n+3) { border-top: var(--line-ink); }
+	.trust-strip > div:nth-child(n+3) { border-top: var(--hairline); }
 
 	/* Paper bar with a water dot under the current item */
 	.mobile-bar {
@@ -188,6 +188,6 @@
 	.footer-grid { grid-template-columns: 1fr; gap: var(--s4); }
 	.trust-strip { grid-template-columns: 1fr; }
 	.trust-strip > div { border-inline-start: 0; }
-	.trust-strip > div + div { border-top: var(--line-ink); }
+	.trust-strip > div + div { border-top: var(--hairline); }
 	.trust-strip > div { padding: 12px var(--s2); }
 }

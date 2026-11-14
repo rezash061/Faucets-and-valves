@@ -34,7 +34,7 @@
 .info-sheet h2 { font-size: clamp(22px, 2vw, 28px); font-weight: 500; margin: var(--s5) 0 var(--s2); font-family: var(--font-sans); scroll-margin-top: calc(var(--header-h) + 24px); }
 .info-sheet h2:first-child { margin-top: 0; }
 .info-sheet h3 { font-family: var(--font-sans); font-size: 19px; margin-top: var(--s4); }
-.info-sheet table { width: 100%; border-collapse: separate; border-spacing: 0; border: var(--line-block); font-family: var(--font-sans); font-size: 15px; }
+.info-sheet table { width: 100%; border-collapse: separate; border-spacing: 0; border: 0; border-radius: var(--r-2); box-shadow: var(--sh-1); overflow: hidden; font-family: var(--font-sans); font-size: 15px; }
 .info-sheet th, .info-sheet td { padding: 10px 14px; border: 0; border-bottom: 1px solid rgb(29 35 38 / .22); text-align: start; }
 .info-sheet tr:last-child th, .info-sheet tr:last-child td { border-bottom: 0; }
 .info-sheet th { background: var(--c-clay-shade); font-weight: 600; }
@@ -88,13 +88,13 @@
 .notice-box--error::before { background: var(--c-danger); }
 
 /* Contact card: a title block */
-.contact-card { position: sticky; top: calc(var(--header-h) + var(--s3)); border: var(--line-block); background: var(--c-clay-lit); }
+.contact-card { position: sticky; top: calc(var(--header-h) + var(--s3)); background: var(--c-clay-lit); border-radius: var(--r-2); box-shadow: var(--sh-1); overflow: hidden; }
 .contact-card .contact-list { margin: 0; }
-.contact-card .contact-list > div { padding: 12px 18px; border-bottom: var(--line-ink); }
+.contact-card .contact-list > div { padding: 12px 18px; border-bottom: var(--hairline); }
 .contact-card .contact-list dt { font-size: 12px; color: var(--text-muted); }
 .contact-card .contact-list dd { margin: 2px 0 0; font-weight: 600; line-height: 1.7; }
 .contact-card .contact-list a { color: var(--link); }
-.contact-map { display: block; width: 100%; height: 260px; border: 0; border-bottom: var(--line-ink); }
+.contact-map { display: block; width: 100%; height: 260px; border: 0; border-bottom: var(--hairline); }
 .contact-route__title { margin: 0; padding: 14px 18px 6px; font-size: 12px; color: var(--text-muted); }
 .contact-route { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 18px 18px; }
 .contact-route .btn { min-height: 44px; padding-inline: 18px; }

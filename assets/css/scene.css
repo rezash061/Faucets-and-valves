@@ -62,7 +62,7 @@
 /* Card for the picked room */
 .fv-house.is-3d .fv-roomcard {
 	display: block; position: absolute; z-index: 5; right: var(--gutter); bottom: var(--gutter); width: min(380px, calc(100% - 32px));
-	border: 1.5px solid var(--c-ink); background: var(--c-paper); box-shadow: 0 10px 30px rgb(0 0 0 / .1); padding: 20px;
+	background: var(--c-clay-lit); border-radius: var(--r-2); box-shadow: var(--sh-2); padding: 22px 24px;
 	opacity: 0; transform: translateY(20px); transition: opacity .4s, transform .5s var(--ease-out);
 }
 .fv-house.is-3d .fv-roomcard[hidden] { display: none; }

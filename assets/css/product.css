@@ -68,8 +68,8 @@
 .woocommerce-product-details__short-description ul { padding-inline-start: 1.2em; }
 
 /* Quick facts as a drawing title block (same linework as the hero) */
-.product-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0 0 var(--s3); border: var(--line-block); background: var(--c-clay-lit); }
-.product-facts > div { padding: 8px 14px; border-top: var(--line-ink); border-inline-start: var(--line-ink); }
+.product-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0 0 var(--s3); background: var(--c-clay-lit); border-radius: var(--r-2); box-shadow: var(--sh-1); overflow: hidden; }
+.product-facts > div { padding: 10px 18px; border-top: var(--hairline); border-inline-start: var(--hairline); }
 .product-facts > div:nth-child(-n+2) { border-top: 0; }
 .product-facts > div:nth-child(odd) { border-inline-start: 0; }
 .product-facts dt { font-size: 12px; color: var(--text-muted); }
@@ -147,10 +147,10 @@
 .product-section .entry-content { max-width: 70ch; }
 
 /* Specs as a drawing title block */
-.specs-table { width: 100%; max-width: 760px; border: var(--line-block); background: var(--c-clay-lit); border-collapse: separate; border-spacing: 0; font-size: 15px; }
-.specs-table th, .specs-table td { padding: 12px 16px; border-bottom: 1px solid rgb(29 35 38 / .22); text-align: start; vertical-align: top; }
+.specs-table { width: 100%; max-width: 760px; border: 0; border-radius: var(--r-2); box-shadow: var(--sh-1); overflow: hidden; background: var(--c-clay-lit); border-collapse: separate; border-spacing: 0; font-size: 15px; }
+.specs-table th, .specs-table td { padding: 12px 16px; border-bottom: var(--hairline); text-align: start; vertical-align: top; }
 .specs-table tr:last-child th, .specs-table tr:last-child td { border-bottom: 0; }
-.specs-table th { width: 40%; font-weight: 400; font-size: 14px; color: var(--text-muted); border-inline-end: 1px solid rgb(29 35 38 / .22); }
+.specs-table th { width: 40%; font-weight: 400; font-size: 14px; color: var(--text-muted); border-inline-end: var(--hairline); }
 .specs-table td { color: var(--heading); font-weight: 500; }
 .specs-table td[dir="ltr"] { font-family: var(--font-code); text-align: right; }
 
