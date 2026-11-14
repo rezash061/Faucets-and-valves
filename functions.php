@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'FV_VERSION', '0.5.0' );
+define( 'FV_VERSION', '0.7.0' );
 define( 'FV_DIR', get_template_directory() );
 define( 'FV_URI', get_template_directory_uri() );
 
@@ -20,8 +20,10 @@ require FV_DIR . '/inc/customizer-home.php';
 require FV_DIR . '/inc/catalogs.php';
 require FV_DIR . '/inc/blog.php';
 require FV_DIR . '/inc/patterns.php';
+require FV_DIR . '/inc/info-pages.php';
 
 if ( class_exists( 'WooCommerce' ) ) {
+	require FV_DIR . '/inc/strings.php';
 	require FV_DIR . '/inc/woocommerce.php';
 	require FV_DIR . '/inc/woocommerce-catalog.php';
 	require FV_DIR . '/inc/woocommerce-single.php';
@@ -32,4 +34,5 @@ if ( class_exists( 'WooCommerce' ) ) {
 	require FV_DIR . '/inc/quick-order.php';
 	require FV_DIR . '/inc/mini-cart.php';
 	require FV_DIR . '/inc/scene.php';
+	require FV_DIR . '/inc/product-3d.php';
 }

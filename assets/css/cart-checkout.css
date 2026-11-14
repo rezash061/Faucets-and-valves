@@ -311,3 +311,44 @@ form.woocommerce-checkout #order_review { grid-column: 2; grid-row: 2; padding: 
 	.qo__foot { flex-direction: column; align-items: stretch; }
 	.qo__submit { margin: 0; }
 }
+
+/* =====================================================================
+   v0.6 — pipe steps, tank cart, title-block account
+   ===================================================================== */
+/* Steps: a pipe with a valve per step; water has reached the steps already done. */
+.checkout-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+.checkout-steps li { position: relative; flex-direction: column; justify-content: flex-start; gap: 8px; padding: 0; border: 0; text-align: center; }
+.checkout-steps li::before {
+	content: ""; position: absolute; top: 13px; inset-inline: 0; height: 8px; z-index: 0;
+	background: linear-gradient(180deg, #d68a5a, #b8693b 45%, #6e3518);
+}
+.checkout-steps li:first-child::before { inset-inline-start: 50%; border-radius: 4px 0 0 4px; }
+.checkout-steps li:last-child::before { inset-inline-end: 50%; }
+.checkout-steps .is-done::before { background: linear-gradient(180deg, #8cc4ee, var(--c-water) 55%, #1f5f96); }
+.checkout-steps__num {
+	position: relative; z-index: 1; width: 34px; height: 34px; border: 0; color: #3b2a0c; font-weight: 700;
+	background: radial-gradient(circle at 40% 35%, #f6deaa, #c9a55c 45%, #7f5f22); box-shadow: 0 3px 6px rgb(29 35 38 / .2);
+}
+.checkout-steps .is-done .checkout-steps__num { background: radial-gradient(circle at 40% 35%, #cfe6f8, var(--c-water) 55%, #1f5f96); color: #fff; }
+.checkout-steps .is-current .checkout-steps__num { outline: 3px solid var(--c-paper); box-shadow: 0 0 0 5px var(--c-copper-text); color: #3b2a0c; }
+.checkout-steps .is-current { color: var(--heading); }
+
+/* Cart head with the tank */
+.cart-head { align-items: center; border-bottom: 0; padding-bottom: var(--s3); }
+.cart-tank { position: relative; flex: none; width: 46px; height: 74px; border-radius: 23px; overflow: hidden; background: linear-gradient(90deg, #9aa0a6, #f2f3f4 35%, #8b9097 70%, #c9cdd1); box-shadow: inset 0 0 0 1px rgb(0 0 0 / .25); }
+.cart-tank::after { content: ""; position: absolute; inset: 4px; border-radius: 19px; background: rgb(255 255 255 / .55); }
+.cart-tank__fill { position: absolute; z-index: 1; inset-inline: 4px; bottom: 4px; max-height: calc(100% - 8px); border-radius: 0 0 19px 19px; background: linear-gradient(180deg, #6fb3ea, var(--c-water)); }
+.cart-items { border-top: 6px solid transparent; border-image: linear-gradient(180deg, #d68a5a, #b8693b 45%, #6e3518) 1; }
+.cart-totals, .cart_totals { border-radius: var(--radius); }
+
+/* Buttons go pill-shaped across cart and checkout */
+.woocommerce #place_order, .woocommerce .checkout-button, .woocommerce-cart .button, .woocommerce-checkout .button { border-radius: var(--radius-pill) !important; }
+.woocommerce form .form-row input.input-text, .woocommerce form .form-row select, .woocommerce form .form-row textarea { border-radius: var(--radius); }
+
+/* Account summary as a title block */
+.account-cards { gap: 0 !important; border: 1.5px solid var(--c-ink); background: var(--c-paper-raised); }
+.account-cards > li { border-radius: 0 !important; border: 0 !important; border-inline-start: 1px solid var(--c-ink) !important; background: none !important; box-shadow: none !important; }
+.account-cards > li:first-child { border-inline-start: 0 !important; }
+.account-cards > li.is-accent { background: var(--c-ink) !important; color: var(--c-paper); }
+.account-cards > li.is-accent .account-cards__label { color: var(--c-steel-300); }
+.woocommerce-MyAccount-navigation a { border-radius: var(--radius-pill); }

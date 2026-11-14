@@ -81,6 +81,20 @@
 	function init(root) { steppers(root); swatches(root); }
 	init();
 
+	// Section nav: mark the section in view (the brass valve under its link).
+	var links = document.querySelectorAll('.product-sections__nav a');
+	if (links.length && 'IntersectionObserver' in window) {
+		var map = {};
+		links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
+		var io = new IntersectionObserver(function (entries) {
+			entries.forEach(function (en) {
+				if (!en.isIntersecting || !map[en.target.id]) return;
+				links.forEach(function (a) { a.classList.toggle('is-current', a === map[en.target.id]); });
+			});
+		}, { rootMargin: '-40% 0px -55% 0px' });
+		Object.keys(map).forEach(function (id) { var el = document.getElementById(id); if (el) io.observe(el); });
+	}
+
 	// Cart totals re-render with AJAX.
 	if (window.jQuery) {
 		window.jQuery(document.body).on('updated_wc_div updated_cart_totals', function () { init(); });

@@ -12,8 +12,7 @@ defined( 'ABSPATH' ) || exit;
  */
 function fv_home_sections() {
 	return array(
-		'manifold'   => __( 'لوله‌کشی سه‌بعدی (دسته‌ها)', 'faucets-valves' ),
-		'anatomy'    => __( 'کالبدشکافی شیر', 'faucets-valves' ),
+		'house'      => __( 'خانهٔ سه‌بعدی (دسته‌ها)', 'faucets-valves' ),
 		'categories' => __( 'کشوهای انبار (همهٔ دسته‌ها)', 'faucets-valves' ),
 		'finishes'   => __( 'مجموعه‌ها بر اساس پرداخت', 'faucets-valves' ),
 		'best'       => __( 'پرفروش‌ها', 'faucets-valves' ),

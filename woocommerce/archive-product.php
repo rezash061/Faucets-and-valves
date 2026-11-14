@@ -4,7 +4,7 @@
  *
  * Layout (RTL): filter panel on the right (start), results on the left. On screens under
  * 1024px the panel becomes a sheet opened from the toolbar.
- * A category with an image gets a slim Cinematic Reveal hero.
+ * Above them: a plaster header with the category's title block and its subcategories as drawers.
  *
  * @see     https://woocommerce.com/document/template-structure/
  * @package FaucetsValves
@@ -15,57 +15,11 @@ defined( 'ABSPATH' ) || exit;
 
 get_header( 'shop' );
 
-$term     = is_product_taxonomy() ? get_queried_object() : null;
-$thumb_id = $term && 'product_cat' === $term->taxonomy ? (int) get_term_meta( $term->term_id, 'thumbnail_id', true ) : 0;
-$title    = woocommerce_page_title( false );
-
-if ( $thumb_id ) :
-	?>
-	<section class="hero hero--slim hero--catalog" data-motion="cinematic" aria-labelledby="shop-title">
-		<div class="hero__mask">
-			<?php
-			echo wp_get_attachment_image( $thumb_id, 'fv-hero', false, array(
-				'class'         => 'hero__img',
-				'alt'           => '',
-				'loading'       => 'eager',
-				'fetchpriority' => 'high',
-				'sizes'         => '100vw',
-			) );
-			?>
-		</div>
-		<div class="hero__shade" aria-hidden="true"></div>
-		<div class="container hero__content">
-			<p class="hero__eyebrow">
-				<?php
-				/* translators: %s: number of products */
-				echo esc_html( sprintf( __( '%s محصول', 'faucets-valves' ), number_format_i18n( $term->count ) ) );
-				?>
-			</p>
-			<h1 class="hero__title" id="shop-title"><?php echo fv_split_words( $title ); // phpcs:ignore WordPress.Security.EscapeOutput ?></h1>
-			<?php if ( $term->description ) : ?>
-				<p class="hero__sub"><?php echo esc_html( wp_trim_words( wp_strip_all_tags( $term->description ), 32 ) ); ?></p>
-			<?php endif; ?>
-		</div>
-	</section>
-	<?php
-endif;
-
-do_action( 'woocommerce_before_main_content' ); // Container + breadcrumb.
-
-if ( ! $thumb_id ) :
-	$brand_logo = $term && 'product_brand' === $term->taxonomy ? (int) get_term_meta( $term->term_id, 'thumbnail_id', true ) : 0;
-	?>
-	<header class="shop-head<?php echo $brand_logo ? ' shop-head--brand' : ''; ?>">
-		<?php if ( $brand_logo ) : ?>
-			<span class="shop-head__logo"><?php echo wp_get_attachment_image( $brand_logo, 'medium', false, array( 'alt' => '' ) ); ?></span>
-		<?php endif; ?>
-		<h1 class="shop-head__title" id="shop-title"><?php echo esc_html( $title ); ?></h1>
-		<?php do_action( 'woocommerce_archive_description' ); ?>
-	</header>
-	<?php
-endif;
+// Plaster header with title block and drawers (template-parts/shop-head.php); it prints the breadcrumb itself.
+get_template_part( 'template-parts/shop-head' );
+remove_action( 'woocommerce_before_main_content', 'woocommerce_breadcrumb', 20 );
+do_action( 'woocommerce_before_main_content' ); // Container.
 ?>
-
 <div class="shop-layout">
 	<?php get_template_part( 'template-parts/shop-filters' ); ?>
 

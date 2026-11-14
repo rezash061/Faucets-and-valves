@@ -27,7 +27,7 @@ remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_singl
 remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_sharing', 50 );
 
 add_action( 'woocommerce_single_product_summary', 'fv_single_eyebrow', 4 );
-add_action( 'woocommerce_single_product_summary', 'fv_single_sku', 6 );
+add_action( 'woocommerce_single_product_summary', 'fv_single_facts', 25 );
 add_action( 'woocommerce_single_product_summary', 'fv_single_datasheet', 35 );
 add_action( 'woocommerce_single_product_summary', 'fv_single_assurances', 45 );
 
@@ -69,6 +69,36 @@ function fv_single_sku() {
 		esc_html__( 'کد کالا:', 'faucets-valves' ),
 		esc_html( $sku ? $sku : '—' )
 	);
+}
+
+/**
+ * Quick facts as a drawing title block: code, connection size, finish, stock.
+ */
+function fv_single_facts() {
+	global $product;
+	$cells = array();
+	$cells[] = array( __( 'کد کالا', 'faucets-valves' ), $product->get_sku() ? $product->get_sku() : '—', true );
+	$size = $product->get_attribute( 'pa_size' );
+	if ( $size ) {
+		$cells[] = array( __( 'اتصال', 'faucets-valves' ), $size, false );
+	}
+	$finish = fv_product_finish( $product );
+	if ( $finish && ! $product->is_type( 'variable' ) ) {
+		$cells[] = array( __( 'پرداخت', 'faucets-valves' ), $finish, false );
+	}
+	if ( $product->is_in_stock() ) {
+		$qty = $product->managing_stock() ? $product->get_stock_quantity() : null;
+		/* translators: %s: quantity */
+		$stock = null !== $qty ? sprintf( __( '%s عدد در انبار', 'faucets-valves' ), number_format_i18n( $qty ) ) : __( 'موجود', 'faucets-valves' );
+	} else {
+		$stock = __( 'ناموجود', 'faucets-valves' );
+	}
+	$cells[] = array( __( 'موجودی', 'faucets-valves' ), $stock, false );
+	echo '<dl class="product-facts">';
+	foreach ( $cells as $c ) {
+		printf( '<div><dt>%1$s</dt><dd%3$s>%2$s</dd></div>', esc_html( $c[0] ), esc_html( $c[1] ), $c[2] ? ' class="product-facts__code" dir="ltr"' : '' );
+	}
+	echo '</dl>';
 }
 
 /**
@@ -138,6 +168,10 @@ function fv_product_sections() {
 	global $product, $post;
 
 	$sections = array();
+	$model    = function_exists( 'fv_product_model' ) ? fv_product_model( $product ) : '';
+	if ( $model ) {
+		$sections['model'] = fv_product_3d_title( $model );
+	}
 	if ( '' !== trim( $post->post_content ) ) {
 		$sections['description'] = __( 'توضیحات', 'faucets-valves' );
 	}
@@ -159,6 +193,12 @@ function fv_product_sections() {
 				<a href="#product-<?php echo esc_attr( $id ); ?>"><?php echo esc_html( $label ); ?></a>
 			<?php endforeach; ?>
 		</nav>
+
+		<?php
+		if ( $model ) {
+			fv_product_3d_section( $product, $model );
+		}
+		?>
 
 		<?php if ( isset( $sections['description'] ) ) : ?>
 			<section class="product-section" id="product-description" aria-labelledby="product-description-title">

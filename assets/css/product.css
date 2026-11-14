@@ -143,3 +143,105 @@
 	.woocommerce div.product form.cart .button.single_add_to_cart_button { min-width: 0; }
 	.woocommerce div.product div.images .flex-control-thumbs { grid-template-columns: repeat(4, 1fr); }
 }
+
+/* =====================================================================
+   v0.6 — plaster & copper product page
+   ===================================================================== */
+
+/* Gallery: studio backdrop, rounded */
+.woocommerce-product-gallery { background: none; }
+.woocommerce-product-gallery .flex-viewport,
+.woocommerce-product-gallery__image img,
+.woocommerce div.product div.images .flex-control-thumbs li img {
+	background: radial-gradient(ellipse at 50% 42%, #fff, #e6e4de 78%); border-radius: var(--radius);
+}
+.woocommerce-product-gallery__image img { object-fit: contain; }
+.woocommerce div.product div.images .woocommerce-product-gallery__trigger { border-radius: 50%; }
+.woocommerce div.product > span.onsale, .woocommerce span.onsale { border-radius: var(--radius-pill); background: var(--c-copper-text); }
+
+/* Price sits on a copper rule like a pipe run */
+.woocommerce div.product p.price, .woocommerce div.product span.price { border-block: 0; padding-block: 0; position: relative; padding-bottom: var(--s2); }
+.woocommerce div.product p.price::after {
+	content: ""; position: absolute; inset-inline: 0; bottom: 0; height: 6px; border-radius: 3px;
+	background: linear-gradient(180deg, #d68a5a, #b8693b 45%, #6e3518);
+}
+
+/* Quick facts as a drawing title block */
+.product-facts {
+	display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0 0 var(--s3);
+	border: 1.5px solid var(--c-ink); background: var(--c-paper-raised);
+}
+.product-facts > div { padding: 8px 14px; border-top: 1px solid var(--c-ink); border-inline-start: 1px solid var(--c-ink); }
+.product-facts > div:nth-child(-n+2) { border-top: 0; }
+.product-facts > div:nth-child(odd) { border-inline-start: 0; }
+.product-facts dt { font-size: 12px; color: var(--text-muted); }
+.product-facts dd { margin: 0; font-weight: 600; font-size: 15px; }
+.product-facts__code { font-family: var(--font-code); text-align: right; }
+
+/* Buttons and fields */
+.woocommerce div.product form.cart .button.single_add_to_cart_button { border-radius: var(--radius-pill); background: var(--c-ink); color: var(--c-paper); }
+.woocommerce div.product form.cart .button.single_add_to_cart_button:hover { background: var(--c-copper-text); }
+.swatch { border-radius: var(--radius-pill); }
+.swatch[aria-pressed="true"] { border-color: var(--c-ink); box-shadow: inset 0 0 0 1px var(--c-ink); }
+.datasheet-link { border-radius: var(--radius-pill); }
+
+/* Section nav: a pipe with a valve marker under the current link */
+.product-sections__nav { position: sticky; background: rgb(242 241 236 / .94); backdrop-filter: blur(8px); border-bottom: 0; }
+.product-sections__nav::after {
+	content: ""; position: absolute; inset-inline: 0; bottom: 0; height: 4px; border-radius: 2px;
+	background: linear-gradient(180deg, #d68a5a, #b8693b 45%, #6e3518); opacity: .85;
+}
+.product-sections__nav a { position: relative; border-bottom: 0; }
+.product-sections__nav a::after {
+	content: ""; position: absolute; bottom: -5px; inset-inline-start: 50%; width: 14px; height: 14px; translate: 50% 0;
+	border-radius: 50%; background: radial-gradient(circle at 40% 35%, #f6deaa, #c9a55c 45%, #7f5f22);
+	transform: scale(0); transition: transform .25s var(--ease-out);
+}
+.product-sections__nav a:hover::after, .product-sections__nav a.is-current::after { transform: scale(1); }
+.product-sections__nav a.is-current { color: var(--heading); }
+
+/* Specs as a drawing title block */
+.specs-table { border: 1.5px solid var(--c-ink); background: var(--c-paper-raised); border-collapse: separate; border-spacing: 0; }
+.specs-table th, .specs-table td { padding: 12px 16px; border-bottom: 1px solid rgb(29 35 38 / .25); }
+.specs-table tr:last-child th, .specs-table tr:last-child td { border-bottom: 0; }
+.specs-table th { border-inline-end: 1px solid rgb(29 35 38 / .25); font-size: 14px; }
+
+/* ---------- 3D viewer ---------- */
+.product-3d .p3d__lead { grid-column: 2; margin: 0; font-family: var(--font-read); color: var(--text-muted); max-width: 62ch; }
+.product-3d .product-section__title { grid-row: span 3; }
+.p3d { grid-column: 2; display: none; }
+.product-3d.is-ready .p3d { display: block; }
+.p3d__stage {
+	position: relative; height: clamp(420px, 62vh, 640px); border-radius: var(--radius); overflow: hidden;
+	background: radial-gradient(ellipse 60% 70% at 50% 50%, #eceae5 0%, #d9d6cf 60%, #c9c6bf 100%);
+	cursor: grab; touch-action: pan-y;
+}
+.p3d__stage:active { cursor: grabbing; }
+.p3d__canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.p3d__lines { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.p3d__lines path { fill: none; stroke: #7a5a2c; stroke-width: 1; }
+.p3d__lines circle { fill: #7a5a2c; }
+.p3d__labels { position: absolute; inset: 0; pointer-events: none; }
+.p3d__labels .alabel { position: absolute; top: 0; left: 0; text-align: end; white-space: nowrap; }
+.p3d__labels .alabel b { display: block; font-weight: 600; font-size: 14px; line-height: 1.4; }
+.p3d__labels .alabel span { display: block; font-family: var(--font-read); font-size: 12px; color: var(--text-muted); }
+.p3d__controls { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s2) var(--s3); margin-top: var(--s2); }
+.p3d__range { display: flex; align-items: center; gap: var(--s2); width: min(100%, 520px); font-size: 14px; }
+.p3d__range span { white-space: nowrap; }
+.p3d__range input { flex: 1; accent-color: var(--c-copper); height: 32px; }
+.p3d__range output { min-width: 3.5em; font-weight: 600; }
+.p3d__status { font-size: 14px; color: var(--text-muted); }
+.p3d__toggle[aria-pressed="true"] { background: var(--c-water-text); }
+.p3d__parts { grid-column: 2; margin: 0; padding-inline-start: 1.4em; columns: 3; column-gap: var(--s4); font-size: 14px; line-height: 1.7; }
+.p3d__parts li { break-inside: avoid; margin-bottom: 6px; }
+.p3d__parts span { display: block; font-family: var(--font-read); font-size: 13px; color: var(--text-muted); }
+.product-3d.is-ready .p3d__parts { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+@media (max-width: 1023px) {
+	.product-3d .p3d__lead, .p3d, .p3d__parts { grid-column: 1; }
+	.product-3d .product-section__title { grid-row: auto; }
+	.p3d__parts { columns: 2; }
+	.p3d__stage { height: 440px; }
+	.p3d__labels .alabel span { display: none; }
+	.p3d__labels .alabel b { font-size: 12px; }
+}

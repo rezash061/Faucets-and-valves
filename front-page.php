@@ -1,6 +1,6 @@
 <?php
 /**
- * Front page: 3D pipe manifold (categories), exploded faucet, then the classic sections. Sections can be switched on/off in
+ * Front page: the 3D house (rooms are categories), then the classic sections. Sections can be switched on/off in
  * Customizer › تنظیمات قالب شیرآلات › بخش‌های صفحهٔ نخست.
  *
  * @package FaucetsValves
@@ -22,10 +22,9 @@ foreach ( array_keys( fv_home_sections() ) as $key ) {
 		continue;
 	}
 	switch ( $key ) {
-		case 'manifold':
-		case 'anatomy':
+		case 'house':
 			if ( $has_wc ) {
-				get_template_part( "template-parts/scene/{$key}" );
+				get_template_part( 'template-parts/scene/house' );
 			}
 			break;
 		case 'categories':

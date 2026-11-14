@@ -1,7 +1,8 @@
 # Scene sources
 
-`src/scene/*.js` are the sources of the 3D front page (pipe manifold and exploded faucet).
-They are bundled into `assets/js/scene/home.js`, which is what the theme loads.
+`src/scene/*.js` are the sources of the 3D scenes: the front page house (`house.js`, `home.js`)
+and the product page valve viewer (`viewer.js`, `product.js`). They are bundled into
+`assets/js/scene/home.js` and `assets/js/scene/product.js`, which is what the theme loads.
 
 To rebuild after editing:
 

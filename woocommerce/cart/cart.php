@@ -18,14 +18,17 @@ do_action( 'woocommerce_before_cart' );
 		<?php do_action( 'woocommerce_before_cart_table' ); ?>
 
 		<div class="cart-head">
-			<h1 class="cart-head__title"><?php esc_html_e( 'سبد خرید', 'faucets-valves' ); ?></h1>
-			<span class="cart-head__count">
-				<?php
-				$fv_count = WC()->cart->get_cart_contents_count();
-				/* translators: %s: item count */
-				echo esc_html( sprintf( __( '%s عدد کالا', 'faucets-valves' ), number_format_i18n( $fv_count ) ) );
-				?>
-			</span>
+			<?php $fv_count = WC()->cart->get_cart_contents_count(); ?>
+			<span class="cart-tank" aria-hidden="true"><span class="cart-tank__fill" style="height:<?php echo esc_attr( min( 100, 18 + $fv_count * 8 ) ); ?>%"></span></span>
+			<div>
+				<h1 class="cart-head__title"><?php esc_html_e( 'مخزن سفارش', 'faucets-valves' ); ?></h1>
+				<span class="cart-head__count">
+					<?php
+					/* translators: %s: item count */
+					echo esc_html( sprintf( __( '%s عدد کالا', 'faucets-valves' ), number_format_i18n( $fv_count ) ) );
+					?>
+				</span>
+			</div>
 		</div>
 
 		<ul class="cart-items shop_table cart woocommerce-cart-form__contents">

@@ -1,13 +1,15 @@
 <?php
 /**
- * Front page 3D scenes: the pipe manifold (one branch per category) and the exploded faucet.
+ * Front page 3D house: a white cutaway model whose rooms are product categories.
  *
- * - Products › Categories: each category gets a valve type (ball, gate, globe, check) and a short
- *   note (e.g. «اتصال ½ اینچ»), shown on its branch.
- * - Customizer › تنظیمات قالب شیرآلات › صحنهٔ صفحهٔ نخست: headline, title block, which categories
- *   become branches, and the product shown at the end of the exploded view.
+ * - Products › Categories › «جای این دسته در خانهٔ سه‌بعدی»: give a category a room (kitchen,
+ *   bathroom, toilet, boiler room, yard), or a fixture inside a room (e.g. «حمام › شیر دوش و وان»).
+ *   A room without a category stays white and cannot be clicked. A fixture without its own
+ *   category links to its room's category.
+ * - If no category has a room yet, the main categories fill the rooms in order.
+ * - Customizer › تنظیمات قالب شیرآلات › «خانهٔ سه‌بعدی»: headline, text and the three cells.
  * - The 3D script (assets/js/scene/home.js) only upgrades the markup. Without WebGL, with data
- *   saving on, or without JavaScript, visitors get a static pipe diagram with category links.
+ *   saving on, or without JavaScript, visitors get the rooms as plain category links.
  *
  * @package FaucetsValves
  */
@@ -15,7 +17,7 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Valve types the manifold can draw, with their Persian names.
+ * Valve types with a 3D model (used by the product page viewer).
  */
 function fv_valve_kinds() {
 	return array(
@@ -26,49 +28,121 @@ function fv_valve_kinds() {
 	);
 }
 
+/**
+ * Rooms of the house and the fixtures labelled in each.
+ *
+ * @return array room => [ label, spots => [ id => label ] ]
+ */
+function fv_house_map() {
+	return apply_filters( 'fv_house_map', array(
+		'kitchen' => array(
+			'label' => __( 'آشپزخانه', 'faucets-valves' ),
+			'spots' => array(
+				'sink'   => __( 'شیر ظرفشویی', 'faucets-valves' ),
+				'filter' => __( 'شیر تصفیهٔ آب', 'faucets-valves' ),
+				'gas'    => __( 'شیر گاز اجاق', 'faucets-valves' ),
+			),
+		),
+		'bath'    => array(
+			'label' => __( 'حمام', 'faucets-valves' ),
+			'spots' => array(
+				'basin'    => __( 'شیر روشویی', 'faucets-valves' ),
+				'shower'   => __( 'شیر دوش و وان', 'faucets-valves' ),
+				'radiator' => __( 'شیر رادیاتور', 'faucets-valves' ),
+			),
+		),
+		'wc'      => array(
+			'label' => __( 'سرویس بهداشتی', 'faucets-valves' ),
+			'spots' => array(
+				'sprayer' => __( 'شیر و شلنگ توالت', 'faucets-valves' ),
+				'angle'   => __( 'شیر پیسوار', 'faucets-valves' ),
+				'basin'   => __( 'شیر روشویی کوچک', 'faucets-valves' ),
+			),
+		),
+		'mech'    => array(
+			'label' => __( 'موتورخانه', 'faucets-valves' ),
+			'spots' => array(
+				'gate'  => __( 'شیر کشویی', 'faucets-valves' ),
+				'check' => __( 'شیر یک‌طرفه', 'faucets-valves' ),
+				'ball'  => __( 'شیر توپی', 'faucets-valves' ),
+				'globe' => __( 'شیر بشقابی', 'faucets-valves' ),
+			),
+		),
+		'yard'    => array(
+			'label' => __( 'حیاط و گاز', 'faucets-valves' ),
+			'spots' => array(
+				'tap' => __( 'شیر حیاط', 'faucets-valves' ),
+				'gas' => __( 'شیر اصلی گاز', 'faucets-valves' ),
+			),
+		),
+	) );
+}
+
+/**
+ * Valid values of the category field: "room:kitchen", "spot:kitchen.sink", …
+ */
+function fv_house_places() {
+	$out = array();
+	foreach ( fv_house_map() as $room => $r ) {
+		$out[ "room:{$room}" ] = $r['label'];
+		foreach ( $r['spots'] as $id => $label ) {
+			$out[ "spot:{$room}.{$id}" ] = $r['label'] . ' › ' . $label;
+		}
+	}
+	return $out;
+}
+
 /* ---------------------------------------------------------------------------
- * Category fields: valve type + branch note
+ * Category fields: place in the house + short note
  * ------------------------------------------------------------------------- */
+
+function fv_house_select( $current = '' ) {
+	echo '<select name="fv_house" id="fv_house">';
+	echo '<option value="">' . esc_html__( 'در خانه نیست', 'faucets-valves' ) . '</option>';
+	foreach ( fv_house_map() as $room => $r ) {
+		echo '<optgroup label="' . esc_attr( $r['label'] ) . '">';
+		/* translators: %s: room name */
+		printf( '<option value="%s"%s>%s</option>', esc_attr( "room:{$room}" ), selected( $current, "room:{$room}", false ), esc_html( sprintf( __( 'کل اتاق: %s', 'faucets-valves' ), $r['label'] ) ) );
+		foreach ( $r['spots'] as $id => $label ) {
+			printf( '<option value="%s"%s>%s</option>', esc_attr( "spot:{$room}.{$id}" ), selected( $current, "spot:{$room}.{$id}", false ), esc_html( $label ) );
+		}
+		echo '</optgroup>';
+	}
+	echo '</select>';
+}
 
 add_action( 'product_cat_add_form_fields', function () {
 	wp_nonce_field( 'fv_cat_scene', 'fv_cat_scene_nonce' );
 	?>
 	<div class="form-field">
-		<label for="fv_valve"><?php esc_html_e( 'نوع شیر در صحنهٔ لوله‌کشی', 'faucets-valves' ); ?></label>
-		<select name="fv_valve" id="fv_valve">
-			<option value=""><?php esc_html_e( 'خودکار', 'faucets-valves' ); ?></option>
-			<?php foreach ( fv_valve_kinds() as $k => $label ) : ?>
-				<option value="<?php echo esc_attr( $k ); ?>"><?php echo esc_html( $label ); ?></option>
-			<?php endforeach; ?>
-		</select>
+		<label for="fv_house"><?php esc_html_e( 'جای این دسته در خانهٔ سه‌بعدی', 'faucets-valves' ); ?></label>
+		<?php fv_house_select(); ?>
+		<p><?php esc_html_e( 'یک اتاق برای دسته‌های اصلی، یا یکی از شیرهای داخل اتاق برای زیردسته‌ها.', 'faucets-valves' ); ?></p>
 	</div>
 	<div class="form-field">
-		<label for="fv_branch_note"><?php esc_html_e( 'یادداشت کوتاه روی لوله', 'faucets-valves' ); ?></label>
+		<label for="fv_branch_note"><?php esc_html_e( 'یادداشت کوتاه', 'faucets-valves' ); ?></label>
 		<input type="text" name="fv_branch_note" id="fv_branch_note" placeholder="<?php esc_attr_e( 'مثلاً: اتصال ½ اینچ', 'faucets-valves' ); ?>">
 	</div>
 	<?php
 } );
 
 add_action( 'product_cat_edit_form_fields', function ( $term ) {
-	$valve = get_term_meta( $term->term_id, 'fv_valve', true );
-	$note  = get_term_meta( $term->term_id, 'fv_branch_note', true );
+	$note = get_term_meta( $term->term_id, 'fv_branch_note', true );
 	wp_nonce_field( 'fv_cat_scene', 'fv_cat_scene_nonce' );
 	?>
 	<tr class="form-field">
-		<th scope="row"><label for="fv_valve"><?php esc_html_e( 'نوع شیر در صحنهٔ لوله‌کشی', 'faucets-valves' ); ?></label></th>
+		<th scope="row"><label for="fv_house"><?php esc_html_e( 'جای این دسته در خانهٔ سه‌بعدی', 'faucets-valves' ); ?></label></th>
 		<td>
-			<select name="fv_valve" id="fv_valve">
-				<option value=""><?php esc_html_e( 'خودکار', 'faucets-valves' ); ?></option>
-				<?php foreach ( fv_valve_kinds() as $k => $label ) : ?>
-					<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $valve, $k ); ?>><?php echo esc_html( $label ); ?></option>
-				<?php endforeach; ?>
-			</select>
-			<p class="description"><?php esc_html_e( 'شیری که روی انشعاب این دسته در صفحهٔ نخست دیده می‌شود.', 'faucets-valves' ); ?></p>
+			<?php fv_house_select( (string) get_term_meta( $term->term_id, 'fv_house', true ) ); ?>
+			<p class="description"><?php esc_html_e( '«کل اتاق»: با کلیک روی آن اتاق در صفحهٔ نخست، این دسته باز می‌شود. یک شیر: برچسب آن شیر به این دسته می‌رود (برای زیردسته‌ها). شیری که دسته ندارد به دستهٔ اتاقش می‌رود.', 'faucets-valves' ); ?></p>
 		</td>
 	</tr>
 	<tr class="form-field">
-		<th scope="row"><label for="fv_branch_note"><?php esc_html_e( 'یادداشت کوتاه روی لوله', 'faucets-valves' ); ?></label></th>
-		<td><input type="text" name="fv_branch_note" id="fv_branch_note" value="<?php echo esc_attr( $note ); ?>" placeholder="<?php esc_attr_e( 'مثلاً: اتصال ½ اینچ', 'faucets-valves' ); ?>"></td>
+		<th scope="row"><label for="fv_branch_note"><?php esc_html_e( 'یادداشت کوتاه', 'faucets-valves' ); ?></label></th>
+		<td>
+			<input type="text" name="fv_branch_note" id="fv_branch_note" value="<?php echo esc_attr( $note ); ?>" placeholder="<?php esc_attr_e( 'مثلاً: اتصال ½ اینچ', 'faucets-valves' ); ?>">
+			<p class="description"><?php esc_html_e( 'کنار تعداد کالا در خانه و بالای صفحهٔ دسته نمایش داده می‌شود.', 'faucets-valves' ); ?></p>
+		</td>
 	</tr>
 	<?php
 } );
@@ -80,11 +154,11 @@ $fv_save_cat_scene = function ( $term_id ) {
 	if ( ! current_user_can( 'manage_product_terms' ) ) {
 		return;
 	}
-	$valve = isset( $_POST['fv_valve'] ) ? sanitize_key( $_POST['fv_valve'] ) : '';
-	if ( $valve && isset( fv_valve_kinds()[ $valve ] ) ) {
-		update_term_meta( $term_id, 'fv_valve', $valve );
+	$place = isset( $_POST['fv_house'] ) ? sanitize_text_field( wp_unslash( $_POST['fv_house'] ) ) : '';
+	if ( $place && isset( fv_house_places()[ $place ] ) ) {
+		update_term_meta( $term_id, 'fv_house', $place );
 	} else {
-		delete_term_meta( $term_id, 'fv_valve' );
+		delete_term_meta( $term_id, 'fv_house' );
 	}
 	$note = isset( $_POST['fv_branch_note'] ) ? sanitize_text_field( wp_unslash( $_POST['fv_branch_note'] ) ) : '';
 	update_term_meta( $term_id, 'fv_branch_note', $note );
@@ -92,43 +166,50 @@ $fv_save_cat_scene = function ( $term_id ) {
 add_action( 'created_product_cat', $fv_save_cat_scene );
 add_action( 'edited_product_cat', $fv_save_cat_scene );
 
+// Show the place in the categories list.
+add_filter( 'manage_edit-product_cat_columns', function ( $cols ) {
+	$cols['fv_house'] = __( 'در خانه', 'faucets-valves' );
+	return $cols;
+} );
+add_filter( 'manage_product_cat_custom_column', function ( $out, $col, $term_id ) {
+	if ( 'fv_house' === $col ) {
+		$place = (string) get_term_meta( $term_id, 'fv_house', true );
+		$out   = esc_html( fv_house_places()[ $place ] ?? '—' );
+	}
+	return $out;
+}, 10, 3 );
+
 /* ---------------------------------------------------------------------------
  * Customizer
  * ------------------------------------------------------------------------- */
 
 add_filter( 'fv_defaults', function ( $d ) {
 	return array_merge( $d, array(
-		'fv_scene_title'     => 'برای دیدن محصولات، یک شیر را باز کنید',
-		'fv_scene_lead'      => 'هر انشعاب یک دسته است؛ شیر هر انشعاب همان نوعی است که در آن دسته می‌فروشیم.',
-		'fv_scene_cell_1_l'  => 'کالا',
-		'fv_scene_cell_1_v'  => '۲٬۴۰۰ کد',
-		'fv_scene_cell_2_l'  => 'ارسال',
-		'fv_scene_cell_2_v'  => '۳۱ استان',
-		'fv_scene_cell_3_l'  => 'قیمت',
-		'fv_scene_cell_3_v'  => 'برای همه',
-		'fv_scene_cats'      => '',
-		'fv_anatomy_product' => 0,
-		'fv_anatomy_t1'      => 'یک شیر، نُه قطعه',
-		'fv_anatomy_p1'      => 'پیش از خرید ببینید هر شیر از چه ساخته شده است. پایین بکشید تا قطعه‌ها از هم جدا شوند.',
-		'fv_anatomy_t2'      => 'بدنهٔ برنج، قلب سرامیکی',
-		'fv_anatomy_p2'      => 'کارتریج سرامیکی ۳۵ میلی‌متری، بدنهٔ برنج ریخته‌گری با آبکاری کروم، پیچ نصب برنجی و شیلنگ استیل بافته با اتصال ½ اینچ.',
+		'fv_scene_title'    => 'هر اتاق، یک دسته از شیرآلات',
+		'fv_scene_lead'     => 'روی یک اتاق بزنید تا شیرهای آن را ببینید.',
+		'fv_scene_cell_1_l' => 'کالا',
+		'fv_scene_cell_1_v' => '۲٬۴۰۰ کد',
+		'fv_scene_cell_2_l' => 'ارسال',
+		'fv_scene_cell_2_v' => '۳۱ استان',
+		'fv_scene_cell_3_l' => 'قیمت',
+		'fv_scene_cell_3_v' => 'برای همه',
 	) );
 } );
 
 add_action( 'customize_register', function ( WP_Customize_Manager $wp ) {
 	$d = fv_defaults();
 	$wp->add_section( 'fv_scene', array(
-		'title'       => __( 'صحنهٔ صفحهٔ نخست', 'faucets-valves' ),
-		'description' => __( 'لوله‌کشی سه‌بعدی (یک انشعاب برای هر دسته) و کالبدشکافی شیر. نوع شیر هر دسته را در محصولات › دسته‌ها تعیین کنید.', 'faucets-valves' ),
+		'title'       => __( 'خانهٔ سه‌بعدی', 'faucets-valves' ),
+		'description' => __( 'خانهٔ سه‌بعدی بالای صفحهٔ نخست. اتاق هر دسته را در محصولات › دسته‌ها تعیین کنید.', 'faucets-valves' ),
 		'panel'       => 'fv_panel',
 		'priority'    => 5,
 	) );
-	$text = function ( $id, $label, $type = 'text', $desc = '' ) use ( $wp, $d ) {
+	$text = function ( $id, $label, $type = 'text' ) use ( $wp, $d ) {
 		$wp->add_setting( $id, array(
 			'default'           => $d[ $id ],
 			'sanitize_callback' => 'textarea' === $type ? 'sanitize_textarea_field' : 'sanitize_text_field',
 		) );
-		$wp->add_control( $id, array( 'label' => $label, 'section' => 'fv_scene', 'type' => $type, 'description' => $desc ) );
+		$wp->add_control( $id, array( 'label' => $label, 'section' => 'fv_scene', 'type' => $type ) );
 	};
 	$text( 'fv_scene_title', __( 'تیتر', 'faucets-valves' ) );
 	$text( 'fv_scene_lead', __( 'توضیح زیر تیتر', 'faucets-valves' ), 'textarea' );
@@ -138,19 +219,6 @@ add_action( 'customize_register', function ( WP_Customize_Manager $wp ) {
 		/* translators: %d: cell number */
 		$text( "fv_scene_cell_{$i}_v", sprintf( __( 'خانهٔ %d: مقدار', 'faucets-valves' ), $i ) );
 	}
-	$text( 'fv_scene_cats', __( 'دسته‌های روی لوله (شناسه‌ها با ویرگول)', 'faucets-valves' ), 'text', __( 'خالی = دسته‌های اصلی به ترتیب خودشان، حداکثر ۶ دسته. مثال: 12,15,9', 'faucets-valves' ) );
-
-	$wp->add_setting( 'fv_anatomy_product', array( 'default' => 0, 'sanitize_callback' => 'absint' ) );
-	$wp->add_control( 'fv_anatomy_product', array(
-		'label'       => __( 'شناسهٔ محصول در پایان کالبدشکافی', 'faucets-valves' ),
-		'description' => __( 'قیمت و دکمهٔ خرید این محصول بعد از سرهم شدن قطعه‌ها نمایش داده می‌شود. خالی = پرفروش‌ترین محصول.', 'faucets-valves' ),
-		'section'     => 'fv_scene',
-		'type'        => 'number',
-	) );
-	$text( 'fv_anatomy_t1', __( 'کالبدشکافی: تیتر اول', 'faucets-valves' ) );
-	$text( 'fv_anatomy_p1', __( 'کالبدشکافی: متن اول', 'faucets-valves' ), 'textarea' );
-	$text( 'fv_anatomy_t2', __( 'کالبدشکافی: تیتر دوم', 'faucets-valves' ) );
-	$text( 'fv_anatomy_p2', __( 'کالبدشکافی: متن دوم', 'faucets-valves' ), 'textarea' );
 } );
 
 /* ---------------------------------------------------------------------------
@@ -158,11 +226,11 @@ add_action( 'customize_register', function ( WP_Customize_Manager $wp ) {
  * ------------------------------------------------------------------------- */
 
 /**
- * Categories shown as branches, with their valve, note and up to 6 products.
+ * Rooms that have a category, each with its fixtures and where their labels link.
  *
- * @return array[]
+ * @return array[] key, room, name, meta, url, spots => [ id => label, sub, url ]
  */
-function fv_scene_branches() {
+function fv_house_rooms() {
 	static $cache = null;
 	if ( null !== $cache ) {
 		return $cache;
@@ -171,93 +239,74 @@ function fv_scene_branches() {
 	if ( ! taxonomy_exists( 'product_cat' ) ) {
 		return $cache;
 	}
-	$ids = array_filter( array_map( 'absint', explode( ',', (string) fv_mod( 'fv_scene_cats' ) ) ) );
-	if ( $ids ) {
-		$terms = get_terms( array( 'taxonomy' => 'product_cat', 'include' => $ids, 'orderby' => 'include', 'hide_empty' => false ) );
-	} else {
-		$terms = get_terms( array(
+	$placed = get_terms( array(
+		'taxonomy'   => 'product_cat',
+		'hide_empty' => false,
+		'meta_key'   => 'fv_house', // phpcs:ignore WordPress.DB.SlowDBQuery
+	) );
+	$by_place = array();
+	if ( ! is_wp_error( $placed ) ) {
+		foreach ( $placed as $term ) {
+			$place = (string) get_term_meta( $term->term_id, 'fv_house', true );
+			if ( $place && ! isset( $by_place[ $place ] ) ) {
+				$by_place[ $place ] = $term;
+			}
+		}
+	}
+	$map = fv_house_map();
+
+	// Nothing set up yet: main categories take the rooms in order.
+	$has_room = false;
+	foreach ( array_keys( $by_place ) as $place ) {
+		$has_room = $has_room || 0 === strpos( $place, 'room:' );
+	}
+	if ( ! $has_room ) {
+		$top = get_terms( array(
 			'taxonomy'   => 'product_cat',
 			'parent'     => 0,
 			'hide_empty' => true,
-			'number'     => 6,
+			'number'     => count( $map ),
 			'orderby'    => 'menu_order',
 			'exclude'    => array( (int) get_option( 'default_product_cat' ) ),
 		) );
-	}
-	if ( is_wp_error( $terms ) ) {
-		return $cache;
-	}
-	$kinds = array_keys( fv_valve_kinds() );
-	foreach ( array_slice( $terms, 0, 6 ) as $i => $term ) {
-		$kind = get_term_meta( $term->term_id, 'fv_valve', true );
-		if ( ! in_array( $kind, $kinds, true ) ) {
-			$kind = $kinds[ $i % count( $kinds ) ];
+		if ( ! is_wp_error( $top ) ) {
+			$top = array_values( $top );
+			foreach ( array_keys( $map ) as $i => $room ) {
+				if ( isset( $top[ $i ] ) ) {
+					$by_place[ "room:{$room}" ] = $top[ $i ];
+				}
+			}
 		}
-		$note = (string) get_term_meta( $term->term_id, 'fv_branch_note', true );
+	}
+
+	$count = function ( $term ) {
 		/* translators: %s: number of products */
-		$meta = sprintf( __( '%s کد', 'faucets-valves' ), number_format_i18n( $term->count ) );
-		if ( '' !== $note ) {
-			$meta .= '، ' . $note;
+		return sprintf( __( '%s کد', 'faucets-valves' ), number_format_i18n( $term->count ) );
+	};
+	foreach ( $map as $room => $r ) {
+		if ( ! isset( $by_place[ "room:{$room}" ] ) ) {
+			continue;
+		}
+		$term  = $by_place[ "room:{$room}" ];
+		$url   = get_term_link( $term );
+		$note  = (string) get_term_meta( $term->term_id, 'fv_branch_note', true );
+		$spots = array();
+		foreach ( $r['spots'] as $id => $label ) {
+			$own          = $by_place[ "spot:{$room}.{$id}" ] ?? null;
+			$spots[ $id ] = $own
+				? array( 'label' => $own->name, 'sub' => $count( $own ), 'url' => get_term_link( $own ) )
+				: array( 'label' => $label, 'sub' => '', 'url' => $url );
 		}
 		$cache[] = array(
 			'key'   => $term->term_id,
-			'kind'  => $kind,
+			'room'  => $room,
 			'name'  => $term->name,
-			'meta'  => $meta,
-			'valve' => fv_valve_kinds()[ $kind ],
-			'url'   => get_term_link( $term ),
-			'term'  => $term,
+			'meta'  => $count( $term ) . ( '' !== $note ? '، ' . $note : '' ),
+			'url'   => $url,
+			'spots' => $spots,
 		);
 	}
 	return $cache;
-}
-
-/**
- * Picture key for a product without a photo: a faucet in its finish, or the branch's valve.
- */
-function fv_scene_thumb_key( $product, $kind ) {
-	$finish = function_exists( 'fv_product_finish' ) ? fv_product_finish( $product ) : '';
-	if ( '' === $finish ) {
-		return $kind;
-	}
-	$swatch = function_exists( 'fv_finish_swatch' ) ? fv_finish_swatch( $finish ) : 'chrome';
-	$map    = array( 'black' => 'black', 'gold' => 'gold', 'brass' => 'gold', 'rose' => 'gold', 'copper' => 'gold', 'steel' => 'nickel' );
-	return 'faucet-' . ( $map[ $swatch ] ?? 'chrome' );
-}
-
-/**
- * Product shown when the faucet reassembles: Customizer choice, else best seller.
- *
- * @return WC_Product|null
- */
-function fv_anatomy_product() {
-	if ( ! function_exists( 'wc_get_product' ) ) {
-		return null;
-	}
-	$id = (int) fv_mod( 'fv_anatomy_product' );
-	$p  = $id ? wc_get_product( $id ) : null;
-	if ( $p && $p->is_visible() ) {
-		return $p;
-	}
-	$best = wc_get_products( array( 'limit' => 1, 'status' => 'publish', 'orderby' => 'popularity', 'order' => 'DESC', 'visibility' => 'catalog' ) );
-	return $best ? $best[0] : null;
-}
-
-/**
- * Labels of the nine faucet parts (top to bottom). Filter to match your own product.
- */
-function fv_anatomy_parts() {
-	return apply_filters( 'fv_anatomy_parts', array(
-		array( 'اهرم', 'برنج با آبکاری کروم' ),
-		array( 'کلاهک', 'پیچ‌شو، قابل تعویض' ),
-		array( 'کارتریج سرامیکی', '۳۵ میلی‌متر، ۵۰۰٬۰۰۰ بار باز و بسته' ),
-		array( 'بدنه', 'برنج ریخته‌گری، ۳۲ سانتی‌متر' ),
-		array( 'دهانه و سرشیر', 'سرشیر ضد رسوب، دهانهٔ ۱۴ سانتی‌متر' ),
-		array( 'واشر آب‌بندی', 'لاستیک EPDM' ),
-		array( 'صفحهٔ پایه', 'ضخامت ۷ میلی‌متر' ),
-		array( 'پیچ و مهرهٔ نصب', 'برنج، رزوهٔ کامل' ),
-		array( 'شیلنگ استیل', 'اتصال ½ اینچ، ۴۰ سانتی‌متر' ),
-	) );
 }
 
 /* ---------------------------------------------------------------------------
@@ -270,20 +319,10 @@ add_action( 'wp_enqueue_scripts', function () {
 	}
 	$rel = 'assets/css/scene.css';
 	wp_enqueue_style( 'fv-scene', FV_URI . "/{$rel}", array( 'fv-motion' ), fv_asset_ver( $rel ) );
-	$want_manifold = fv_home_on( 'manifold' ) && fv_scene_branches();
-	$want_anatomy  = fv_home_on( 'anatomy' );
-	if ( ! $want_manifold && ! $want_anatomy ) {
+	if ( ! fv_home_on( 'house' ) || ! fv_house_rooms() ) {
 		return;
 	}
 	$rel = 'assets/js/scene/home.js';
-	wp_enqueue_script( 'fv-scene', FV_URI . "/{$rel}", array( 'gsap', 'gsap-scrolltrigger' ), fv_asset_ver( $rel ), array( 'in_footer' => true, 'strategy' => 'defer' ) );
-	$branches = array_map( function ( $b ) {
-		unset( $b['term'] );
-		return $b;
-	}, $want_manifold ? fv_scene_branches() : array() );
-	wp_add_inline_script( 'fv-scene', 'window.FV_SCENE = ' . wp_json_encode( array(
-		'branches' => $branches,
-		'anatomy'  => array( 'labels' => fv_anatomy_parts() ),
-		'i18n'     => array( 'added' => __( 'در مخزن', 'faucets-valves' ) ),
-	) ) . ';', 'before' );
+	wp_enqueue_script( 'fv-scene', FV_URI . "/{$rel}", array( 'gsap' ), fv_asset_ver( $rel ), array( 'in_footer' => true, 'strategy' => 'defer' ) );
+	wp_add_inline_script( 'fv-scene', 'window.FV_SCENE = ' . wp_json_encode( array( 'rooms' => fv_house_rooms() ) ) . ';', 'before' );
 } );

@@ -33,17 +33,18 @@ $sku    = $product->get_sku();
 		<?php if ( ! $product->is_in_stock() ) : ?>
 			<span class="card__badge card__badge--muted"><?php esc_html_e( 'ناموجود', 'faucets-valves' ); ?></span>
 		<?php endif; ?>
+		<?php if ( $sku ) : ?>
+			<span class="card__tag" dir="ltr"><?php echo esc_html( $sku ); ?></span>
+		<?php endif; ?>
 		<?php echo $product->get_image( 'woocommerce_thumbnail', array( 'class' => 'card__img', 'loading' => 'lazy', 'decoding' => 'async' ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 	</a>
 
 	<div class="card__body">
 		<?php if ( $finish ) : ?>
-			<span class="card__finish"><?php echo esc_html( $finish ); ?></span>
+			<?php $sw = fv_finish_swatch( $finish ); ?>
+			<span class="card__finish"><?php if ( $sw ) : ?><span class="swatch-dot swatch--<?php echo esc_attr( $sw ); ?>" aria-hidden="true"></span><?php endif; ?><?php echo esc_html( $finish ); ?></span>
 		<?php endif; ?>
 		<h3 class="card__name"><a href="<?php echo esc_url( $link ); ?>"><?php echo esc_html( $name ); ?></a></h3>
-		<?php if ( $sku ) : ?>
-			<span class="card__sku" dir="ltr"><?php echo esc_html( $sku ); ?></span>
-		<?php endif; ?>
 
 		<div class="card__foot">
 			<span class="price"><?php echo $product->get_price_html(); // phpcs:ignore WordPress.Security.EscapeOutput ?></span>

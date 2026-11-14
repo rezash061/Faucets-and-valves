@@ -2,18 +2,18 @@ import * as THREE from 'three';
 import { gsap } from './gsap.js';
 import { setupRenderer, makeEnvironment, makeMaterials, waterTexture } from './materials.js';
 
-const R = 1.6; // pipe radius
+export const R = 1.6; // pipe radius
 
 /* ---------- geometry helpers ---------- */
-function cyl(r, len, mat, seg = 40) {
+export function cyl(r, len, mat, seg = 40) {
 	const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r, len, seg), mat);
 	m.castShadow = true; m.receiveShadow = true;
 	return m;
 }
-function alongX(mesh) { mesh.rotation.z = Math.PI / 2; return mesh; }
-function hex(r, len, mat) { return cyl(r, len, mat, 6); }
+export function alongX(mesh) { mesh.rotation.z = Math.PI / 2; return mesh; }
+export function hex(r, len, mat) { return cyl(r, len, mat, 6); }
 
-function pipeX(x1, x2, y, mat) {
+export function pipeX(x1, x2, y, mat) {
 	const m = alongX(cyl(R, Math.abs(x2 - x1), mat));
 	m.position.set((x1 + x2) / 2, y, 0);
 	return m;
@@ -32,7 +32,7 @@ function elbow(corner, quadrantRotZ, mat) {
 	t.rotation.z = quadrantRotZ;
 	return t;
 }
-function collar(x, y, axis, mat) {
+export function collar(x, y, axis, mat) {
 	const c = hex(R * 1.32, 1.6, mat);
 	if (axis === 'x') alongX(c);
 	c.position.set(x, y, 0);
@@ -126,7 +126,7 @@ export function checkValve(m) {
 }
 
 /* ---------- glass sight section with water ---------- */
-function sightGlass(xRight, xLeft, y, m, wTex) {
+export function sightGlass(xRight, xLeft, y, m, wTex) {
 	const g = new THREE.Group();
 	const len = xRight - xLeft;
 	const glass = alongX(cyl(R * 1.12, len, m.glass, 40)); glass.castShadow = false; g.add(glass);
