@@ -1,0 +1,17 @@
+/*
+Theme Name: Faucets & Valves
+Theme URI: https://example.com/
+Author: Faucets & Valves
+Description: قالب ووکامرس راست‌به‌چپ برای فروش عمده شیرآلات و شیرهای صنعتی؛ سبک صنعتی-لوکس با حرکت‌های سینمایی (Cinematic Reveal، Material Reveal، Staggered Entrance).
+Version: 0.5.0
+Requires at least: 6.5
+Tested up to: 6.8
+Requires PHP: 8.1
+WC requires at least: 8.0
+License: GNU General Public License v2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: faucets-valves
+Tags: e-commerce, rtl-language-support, custom-logo, custom-menu, featured-images, translation-ready
+*/
+
+/* Styles live in /assets/css and are enqueued from inc/enqueue.php. */

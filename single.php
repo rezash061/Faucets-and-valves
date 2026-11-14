@@ -1,0 +1,106 @@
+<?php
+/**
+ * Single article: dark title band with the featured image (Cinematic Reveal), reading
+ * column, tags, related guides.
+ *
+ * @package FaucetsValves
+ */
+
+defined( 'ABSPATH' ) || exit;
+
+get_header();
+
+while ( have_posts() ) :
+	the_post();
+	$cats = get_the_category();
+	?>
+	<article <?php post_class( 'article' ); ?>>
+		<header class="hero hero--slim hero--article" data-motion="cinematic">
+			<div class="hero__mask">
+				<?php
+				if ( has_post_thumbnail() ) {
+					the_post_thumbnail( 'fv-hero', array(
+						'class'         => 'hero__img',
+						'alt'           => '',
+						'loading'       => 'eager',
+						'fetchpriority' => 'high',
+						'sizes'         => '100vw',
+					) );
+				} else {
+					echo '<div class="hero__img hero__img--placeholder" aria-hidden="true"></div>';
+				}
+				?>
+			</div>
+			<div class="hero__shade" aria-hidden="true"></div>
+			<div class="container hero__content">
+				<p class="hero__eyebrow">
+					<?php
+					echo esc_html( $cats ? $cats[0]->name : __( 'مقاله', 'faucets-valves' ) );
+					?>
+				</p>
+				<h1 class="hero__title"><?php echo fv_split_words( get_the_title() ); // phpcs:ignore WordPress.Security.EscapeOutput ?></h1>
+				<p class="article__meta">
+					<time datetime="<?php echo esc_attr( get_the_date( 'c' ) ); ?>"><?php echo esc_html( get_the_date() ); ?></time>
+					<span aria-hidden="true">·</span>
+					<span>
+						<?php
+						/* translators: %s: minutes */
+						echo esc_html( sprintf( __( '%s دقیقه مطالعه', 'faucets-valves' ), number_format_i18n( fv_reading_time() ) ) );
+						?>
+					</span>
+				</p>
+			</div>
+		</header>
+
+		<div class="container article__body">
+			<?php
+			if ( function_exists( 'woocommerce_breadcrumb' ) ) {
+				woocommerce_breadcrumb();
+			}
+			?>
+			<?php if ( has_excerpt() ) : ?>
+				<p class="article__lead"><?php echo esc_html( get_the_excerpt() ); ?></p>
+			<?php endif; ?>
+			<div class="entry-content article__content"><?php the_content(); ?></div>
+			<?php wp_link_pages(); ?>
+
+			<?php $tags = get_the_tags(); ?>
+			<?php if ( $tags ) : ?>
+				<ul class="article__tags" aria-label="<?php esc_attr_e( 'برچسب‌ها', 'faucets-valves' ); ?>">
+					<?php foreach ( $tags as $tag ) : ?>
+						<li><a href="<?php echo esc_url( get_tag_link( $tag ) ); ?>">#<?php echo esc_html( $tag->name ); ?></a></li>
+					<?php endforeach; ?>
+				</ul>
+			<?php endif; ?>
+		</div>
+	</article>
+
+	<?php
+	$related = fv_related_posts( get_the_ID(), 3 );
+	if ( $related->have_posts() ) :
+		?>
+		<section class="section section--catalog related-posts" aria-labelledby="related-posts-title">
+			<div class="container">
+				<div class="section-head"><h2 id="related-posts-title"><?php esc_html_e( 'راهنماهای مرتبط', 'faucets-valves' ); ?></h2></div>
+				<ul class="post-grid" data-motion="stagger">
+					<?php
+					while ( $related->have_posts() ) :
+						$related->the_post();
+						get_template_part( 'template-parts/post-card' );
+					endwhile;
+					wp_reset_postdata();
+					?>
+				</ul>
+			</div>
+		</section>
+		<?php
+	endif;
+
+	if ( comments_open() || get_comments_number() ) :
+		?>
+		<div class="container article__comments"><?php comments_template(); ?></div>
+		<?php
+	endif;
+endwhile;
+
+get_footer();

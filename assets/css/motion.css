@@ -1,0 +1,36 @@
+/*
+ * Motion: the metal sheen and the hidden start states.
+ *
+ * Start states apply only under html.js-motion, which is set in <head> only when the visitor
+ * allows motion. If scripts fail, the class is removed and everything shows at rest.
+ */
+
+/* 02 Material Reveal — the sheen band, moved by --sheen */
+.material, .fv-material { display: block; position: relative; overflow: hidden; isolation: isolate; }
+.material::after, .fv-material::after {
+	content: ""; position: absolute; inset: -20% -60%; z-index: 1; pointer-events: none;
+	background: linear-gradient(105deg, transparent 40%, rgb(255 255 255 / .6) 50%, transparent 60%);
+	mix-blend-mode: soft-light;
+	transform: translateX(var(--sheen, 140%));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	/* 01 Cinematic Reveal */
+	.js-motion [data-motion="cinematic"] .hero__mask { clip-path: inset(0 0 0 92%); }
+	.js-motion [data-motion="cinematic"] .hero__eyebrow,
+	.js-motion [data-motion="cinematic"] .hero__title .w > span,
+	.js-motion [data-motion="cinematic"] .hero__sub,
+	.js-motion [data-motion="cinematic"] .hero__ctas { opacity: 0; }
+
+	/* 03 Staggered Entrance */
+	.js-motion [data-motion="stagger"] > * { opacity: 0; }
+
+	/* 02 Material Reveal */
+	.js-motion [data-motion="material"],
+	.js-motion .woocommerce-product-gallery.material,
+	.js-motion .fv-material { clip-path: inset(100% 0 0 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}

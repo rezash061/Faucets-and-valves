@@ -1,0 +1,142 @@
+/* Design tokens — Faucets & Valves, v0.5 "plaster & copper". Contrast pairs checked against WCAG AA (4.5:1). */
+/* Estedad (OFL) for interface and headings; Noto Naskh Arabic (OFL) for reading text.
+   A digits-only face maps 0-9 to Persian digits everywhere; codes use --font-code and keep Latin digits. */
+@font-face { font-family: "Estedad"; src: url("../fonts/Estedad.woff2") format("woff2"); font-weight: 100 900; font-style: normal; font-display: swap; }
+@font-face { font-family: "FV Digits"; src: url("../fonts/EstedadDigits.woff2") format("woff2"); font-weight: 100 900; font-display: swap; unicode-range: U+0030-0039; }
+@font-face { font-family: "Naskh"; src: url("../fonts/Naskh.woff2") format("woff2"); font-weight: 400 700; font-display: swap; }
+
+:root {
+	/* Primitive colors */
+	--c-plaster: #D8D5CE;     /* wall behind the pipes */
+	--c-plaster-2: #C9C6BE;
+	--c-paper: #F2F1EC;       /* sheets, catalog surface */
+	--c-paper-raised: #FAF9F6;
+	--c-ink: #1D2326;         /* text on paper: 14.6:1 */
+	--c-ink-2: #55606A;       /* secondary on paper: 5.9:1 */
+	--c-ink-3: #262E32;
+	--c-copper: #B8693B;      /* decorative copper (pipes, rules) */
+	--c-copper-text: #8E4A22; /* copper as text/accent on paper: 6.3:1 */
+	--c-copper-light: #E0A178;/* copper on ink: 7.6:1 */
+	--c-water: #2F7FC7;       /* water, fills */
+	--c-water-text: #1F5F96;  /* links/active on paper: 6.2:1 */
+	--c-brass: #C9A55C;
+	--c-steel-300: #C9CED1;   /* body on ink: 10.6:1 */
+	--c-steel-500: #98A1A8;   /* secondary on ink: 5.8:1 */
+	--c-danger: #B42318;
+	--c-success: #15803D;
+	/* Legacy names kept so older rules keep working */
+	--c-brass-400: var(--c-copper-light);
+	--c-brass-700: var(--c-copper-text);
+	--c-graphite-950: var(--c-ink);
+	--c-stone-50: var(--c-paper);
+	--c-stone-100: #E9E7E1;
+	--c-stone-300: #CFCCC4;
+	--c-ink-900: var(--c-ink);
+	--c-ink-600: var(--c-ink-2);
+
+	/* Type */
+	--font-sans: "FV Digits", "Estedad", Tahoma, system-ui, sans-serif;
+	--font-read: "FV Digits", "Naskh", "Estedad", Tahoma, serif;
+	--font-code: "Estedad", Tahoma, sans-serif; /* Latin digits for product codes */
+	--font-mono: var(--font-code);
+	--fs-xs: 13px;
+	--fs-sm: 14px;
+	--fs-base: 16px;
+	--fs-md: 18px;
+	--fs-lg: 22px;
+	--fs-xl: clamp(24px, 2.4vw, 28px);
+	--fs-2xl: clamp(28px, 3.4vw, 40px);
+	--fs-3xl: clamp(40px, 6.4vw, 64px);
+	--fs-hero: clamp(40px, 6.4vw, 92px);
+	--lh-body: 1.8;     /* Persian needs more leading than Latin. */
+	--lh-tight: 1.3;
+
+	/* Spacing (spacious scale) */
+	--s1: 8px;
+	--s2: 16px;
+	--s3: 24px;
+	--s4: 32px;
+	--s5: 48px;
+	--s6: 64px;
+	--s7: 96px;
+	--section-y: clamp(64px, 10vw, 128px);
+
+	/* Layout */
+	--max: 1440px;
+	--content: 760px;
+	--gutter: clamp(16px, 4vw, 48px);
+	--header-h: 76px;
+	--mobile-bar-h: 64px;
+
+	/* Shape */
+	--radius: 6px;
+	--radius-pill: 999px;
+	--radius-input: 2px;
+	--hairline: 1px solid var(--c-stone-300);
+	--shadow-sheet: 0 20px 60px rgb(29 35 38 / .16);
+
+	/* Motion */
+	--ease-out: cubic-bezier(.16, 1, .3, 1);
+	--dur-fast: 200ms;
+
+	/* Semantic (paper is the default surface) */
+	--bg: var(--c-paper);
+	--bg-raised: var(--c-paper-raised);
+	--bg-media: #E9E7E1;
+	--text: var(--c-ink);
+	--text-muted: var(--c-ink-2);
+	--heading: var(--c-ink);
+	--accent: var(--c-copper-text);
+	--accent-contrast: #FFFFFF;
+	--link: var(--c-water-text);
+	--border: var(--c-stone-300);
+	--focus: var(--c-water-text);
+}
+
+/* Ink (dark) surface: footer, mobile bar and showroom bands. The header is on plaster now. */
+.surface-showroom,
+.section--showroom,
+.mobile-bar,
+.site-footer,
+.hero {
+	--bg: var(--c-ink);
+	--bg-raised: var(--c-ink-3);
+	--bg-media: var(--c-ink-3);
+	--text: var(--c-steel-300);
+	--text-muted: var(--c-steel-500);
+	--heading: var(--c-paper);
+	--accent: var(--c-copper-light);
+	--accent-contrast: var(--c-ink);
+	--link: var(--c-copper-light);
+	--border: rgb(255 255 255 / .1);
+	--focus: var(--c-copper-light);
+}
+
+/* Plaster surface: header, nav drawer, the pipe scene */
+.site-header,
+.nav-drawer,
+.surface-plaster {
+	--bg: var(--c-plaster);
+	--bg-raised: var(--c-paper);
+	--text: var(--c-ink);
+	--text-muted: var(--c-ink-2);
+	--heading: var(--c-ink);
+	--accent: var(--c-copper-text);
+	--accent-contrast: #FFFFFF;
+	--border: rgb(29 35 38 / .16);
+	--focus: var(--c-water-text);
+}
+
+/* Catalog sections inside a showroom page switch back to light */
+.section--catalog {
+	--bg: var(--c-paper);
+	--bg-raised: var(--c-paper-raised);
+	--bg-media: var(--c-stone-100);
+	--text: var(--c-ink-900);
+	--text-muted: var(--c-ink-600);
+	--heading: var(--c-ink-900);
+	--accent: var(--c-brass-700);
+	--accent-contrast: #FFFFFF;
+	--border: var(--c-stone-300);
+	--focus: var(--c-brass-700);
+}
