@@ -21,14 +21,10 @@ foreach ( $catalogs as $c ) {
 
 while ( have_posts() ) :
 	the_post();
+	/* translators: %s: number of catalogues */
+	fv_page_head( $catalogs ? array( array( __( 'کاتالوگ', 'faucets-valves' ), sprintf( __( '%s فایل', 'faucets-valves' ), number_format_i18n( count( $catalogs ) ) ) ), array( __( 'قالب', 'faucets-valves' ), 'PDF' ) ) : array() );
 	?>
 	<div class="container page-wrap catalogs-page">
-		<header class="page-header">
-			<h1 class="entry-title"><?php the_title(); ?></h1>
-			<?php if ( has_excerpt() ) : ?>
-				<p class="page-lead"><?php echo esc_html( get_the_excerpt() ); ?></p>
-			<?php endif; ?>
-		</header>
 
 		<?php if ( '' !== trim( get_the_content() ) ) : ?>
 			<div class="entry-content"><?php the_content(); ?></div>

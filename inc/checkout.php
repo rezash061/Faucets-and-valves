@@ -4,7 +4,8 @@
  * reorder, assets.
  *
  * The theme styles WooCommerce's classic (shortcode) cart and checkout. WooCommerce now
- * creates block-based pages by default; an admin notice offers a one-click switch.
+ * creates block-based pages by default: those blocks are rendered as the classic shortcodes on the
+ * site, and an admin notice offers to convert the pages permanently.
  *
  * @package FaucetsValves
  */
@@ -29,6 +30,25 @@ function fv_block_checkout_pages() {
 	return $out;
 }
 
+/*
+ * Block-based cart/checkout pages (WooCommerce's default for new stores) would bypass the theme's
+ * design, steps bar, proforma and card-to-card flow. Render them as the classic shortcodes instead,
+ * so the store looks and works the same whichever kind of page WooCommerce created.
+ */
+add_filter( 'pre_render_block', function ( $pre, $block ) {
+	if ( null !== $pre || is_admin() || ! function_exists( 'WC' ) ) {
+		return $pre;
+	}
+	$map = array(
+		'woocommerce/cart'     => 'woocommerce_cart',
+		'woocommerce/checkout' => 'woocommerce_checkout',
+	);
+	if ( empty( $block['blockName'] ) || ! isset( $map[ $block['blockName'] ] ) ) {
+		return $pre;
+	}
+	return do_shortcode( '[' . $map[ $block['blockName'] ] . ']' );
+}, 10, 2 );
+
 add_action( 'admin_notices', function () {
 	if ( ! current_user_can( 'manage_woocommerce' ) || ! fv_block_checkout_pages() ) {
 		return;
@@ -37,7 +57,7 @@ add_action( 'admin_notices', function () {
 	?>
 	<div class="notice notice-warning">
 		<p><strong><?php esc_html_e( 'قالب شیرآلات:', 'faucets-valves' ); ?></strong>
-		<?php esc_html_e( 'برگه‌های سبد خرید و تسویه حساب از بلوک‌های جدید ووکامرس استفاده می‌کنند. طراحی قالب، پیش‌فاکتور، کارت به کارت و بیشتر درگاه‌های ایرانی با نسخهٔ کلاسیک کار می‌کنند.', 'faucets-valves' ); ?></p>
+		<?php esc_html_e( 'برگه‌های سبد خرید و تسویه حساب از بلوک‌های جدید ووکامرس ساخته شده‌اند. قالب در سایت نسخهٔ کلاسیک را نمایش می‌دهد (طراحی قالب، پیش‌فاکتور، کارت به کارت و درگاه‌های ایرانی با آن کار می‌کنند)، ولی تنظیمات بلوک‌ها در ویرایشگر اثری ندارند. برای یکی شدن ویرایشگر با سایت، برگه‌ها را تبدیل کنید.', 'faucets-valves' ); ?></p>
 		<p><a class="button button-primary" href="<?php echo esc_url( $url ); ?>"><?php esc_html_e( 'تبدیل به سبد خرید و تسویه حساب کلاسیک', 'faucets-valves' ); ?></a></p>
 	</div>
 	<?php
@@ -84,6 +104,25 @@ function fv_checkout_steps( $current ) {
 }
 add_action( 'woocommerce_before_cart', function () { fv_checkout_steps( 1 ); }, 1 );
 add_action( 'woocommerce_before_checkout_form', function () { fv_checkout_steps( 2 ); }, 1 );
+
+// Pay for an existing order (from the account's «پرداخت» button): same steps bar and a heading.
+add_action( 'before_woocommerce_pay', function () {
+	global $wp;
+	fv_checkout_steps( 2 );
+	$order = ! empty( $wp->query_vars['order-pay'] ) ? wc_get_order( absint( $wp->query_vars['order-pay'] ) ) : null;
+	if ( $order ) {
+		/* translators: %s: order number */
+		echo '<h1 class="order-pay__title">' . esc_html( sprintf( __( 'پرداخت سفارش %s', 'faucets-valves' ), fv_fa_digits( $order->get_order_number() ) ) ) . '</h1>';
+	}
+}, 1 );
+
+// Lost / reset password: a heading above the form (the account page has none of its own here).
+add_action( 'woocommerce_before_lost_password_form', function () {
+	echo '<h1 class="account-form__title">' . esc_html__( 'بازیابی رمز عبور', 'faucets-valves' ) . '</h1>';
+} );
+add_action( 'woocommerce_before_reset_password_form', function () {
+	echo '<h1 class="account-form__title">' . esc_html__( 'رمز عبور تازه', 'faucets-valves' ) . '</h1>';
+} );
 
 /* ---------- Checkout fields for Iran ---------- */
 
