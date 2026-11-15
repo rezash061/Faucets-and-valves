@@ -173,3 +173,6 @@
 .fv-search input[type="search"]:focus { outline: none; border-color: var(--c-water-text); box-shadow: 0 0 0 3px rgb(31 95 150 / .22); }
 .fv-search .pill { height: 52px; padding-inline: 26px; flex: none; }
 .not-found .fv-search { margin-top: var(--s3); }
+
+/* The page header already leaves room below it; don't double it with the content's top padding */
+.page-hero + .page-wrap { padding-top: 0; }

@@ -395,6 +395,7 @@ form.lost_reset_password button[type="submit"]:hover { background: var(--c-ink-3
 .qo__row--head { font-size: var(--fs-sm); color: var(--text-muted); padding-block: 10px; }
 .qo__n { color: var(--text-muted); text-align: center; }
 .qo__combo { position: relative; display: block; }
+.qo__combo[hidden], .qo__picked[hidden], .qo__list[hidden] { display: none; }
 .qo__search { min-height: 48px; }
 .qo__list { position: absolute; z-index: 20; inset-inline: 0; top: calc(100% + 4px); max-height: 320px; overflow-y: auto; margin: 0; padding: 6px; list-style: none; background: var(--c-clay-lit); border-radius: var(--r-2); box-shadow: var(--sh-3); }
 .qo__list li { display: grid; grid-template-columns: 40px 1fr auto; gap: 10px; align-items: center; min-height: 52px; padding: 6px 10px; border-radius: var(--r-1); cursor: pointer; }
@@ -420,6 +421,8 @@ form.lost_reset_password button[type="submit"]:hover { background: var(--c-ink-3
 .qo__msg { margin: 0; flex: 1; color: var(--c-danger); font-size: var(--fs-sm); }
 .qo__submit { margin-inline-start: auto; min-height: 52px; }
 .qo__submit .icon { width: 20px; height: 20px; }
+/* On phones the sticky total sits on top of the bottom tab bar, not under it */
+@media (max-width: 1023px) { .qo__foot { bottom: calc(var(--mobile-bar-h) + env(safe-area-inset-bottom)); } }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 1023px) {
