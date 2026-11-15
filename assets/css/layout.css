@@ -72,19 +72,15 @@
 	.search-toggle__text { display: inline; }
 }
 
-/* Cart as a small clay tank that fills with water */
-.tank { display: flex; align-items: center; gap: 10px; height: 44px; padding-inline: 4px; border-radius: var(--radius-pill); color: var(--c-ink); }
-.tank__body {
-	position: relative; width: 22px; height: 38px; border-radius: 11px; overflow: hidden;
-	background: var(--c-clay-lit); box-shadow: inset 0 0 0 1px var(--c-ink), 0 2px 6px rgb(29 35 38 / .12);
-}
-.tank__fill {
-	position: absolute; z-index: 1; inset-inline: 3px; bottom: 3px; max-height: calc(100% - 6px);
-	border-radius: 2px 2px 8px 8px; background: var(--c-water); opacity: .85; transition: height .9s var(--ease-out);
-}
-.tank__label { font-size: 12px; line-height: 1.3; text-align: start; color: var(--c-ink-2); }
-.tank__label b { display: block; font-size: 15px; color: var(--c-ink); }
-@media (max-width: 700px) { .tank__label { display: none; } }
+/* Cart: a basket with a water-blue count badge, and the count in words beside it */
+.hcart { display: flex; align-items: center; gap: 10px; height: 44px; padding-inline: 6px 10px; border-radius: var(--radius-pill); color: var(--c-ink); }
+.hcart:hover { background: rgb(29 35 38 / .06); }
+.hcart__icon { position: relative; display: grid; place-items: center; width: 32px; height: 32px; }
+.hcart__icon .icon { width: 24px; height: 24px; }
+.hcart__icon .cart-count { top: -4px; inset-inline-end: auto; inset-inline-start: -6px; }
+.hcart__label { font-size: 12px; line-height: 1.3; text-align: start; color: var(--c-ink-2); }
+.hcart__label b { display: block; font-size: 15px; color: var(--c-ink); }
+@media (max-width: 700px) { .hcart { padding-inline: 6px; } .hcart__label { display: none; } }
 
 /* Search panel: a plaster shelf under the header with the pill field */
 .header-search { border-top: 1px solid var(--border); background: var(--c-plaster); box-shadow: 0 12px 24px -16px rgb(29 35 38 / .3); }

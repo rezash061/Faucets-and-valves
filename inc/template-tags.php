@@ -17,6 +17,7 @@ function fv_icon( $name, $class = '' ) {
 	$paths = array(
 		'search'   => '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
 		'user'     => '<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/>',
+		'basket'   => '<path d="m5 11 4-7"/><path d="m19 11-4-7"/><path d="M2 11h20"/><path d="m3.5 11 1.6 7.4a2 2 0 0 0 2 1.6h9.8a2 2 0 0 0 2-1.6l1.7-7.4"/><path d="M4.5 15.5h15"/><path d="m9 11 1 9"/><path d="m15 11-1 9"/>',
 		'bag'      => '<path d="M5 7h14l-1.2 12.2a1 1 0 0 1-1 .8H7.2a1 1 0 0 1-1-.8z"/><path d="M9 7a3 3 0 0 1 6 0"/>',
 		'menu'     => '<path d="M4 7h16M4 12h16M4 17h16"/>',
 		'close'    => '<path d="M6 6l12 12M18 6 6 18"/>',
@@ -98,19 +99,19 @@ function fv_cart_link( $class = 'icon-btn header-cart', $with_label = false ) {
 	/* translators: %s: number of items */
 	$label = sprintf( __( 'سبد خرید، %s قلم', 'faucets-valves' ), number_format_i18n( $count ) );
 
-	// Header: the cart is a small water tank that fills as items are added.
+	// Header: a shopping basket with a count badge and, on wider screens, the item count in words.
 	if ( false !== strpos( $class, 'header-cart' ) ) {
-		$fill = $count ? min( 100, 18 + $count * 8 ) : 8;
 		return sprintf(
-			'<a class="%1$s tank" href="%2$s" aria-label="%3$s"><span class="tank__body" aria-hidden="true"><span class="tank__fill" style="height:%4$d%%"></span></span><span class="tank__label" aria-hidden="true">%5$s<b>%6$s</b></span><span class="cart-count" hidden>%7$s</span></a>',
-			esc_attr( str_replace( 'icon-btn', '', $class ) ),
+			'<a class="%1$s hcart" href="%2$s" aria-label="%3$s"><span class="hcart__icon" aria-hidden="true">%4$s<span class="cart-count"%5$s>%6$s</span></span><span class="hcart__label" aria-hidden="true">%7$s<b>%8$s</b></span></a>',
+			esc_attr( trim( str_replace( 'icon-btn', '', $class ) ) ),
 			esc_url( wc_get_cart_url() ),
 			esc_attr( $label ),
-			$fill,
-			esc_html__( 'مخزن سفارش', 'faucets-valves' ),
+			fv_icon( 'basket' ),
+			$count ? '' : ' hidden',
+			esc_html( number_format_i18n( $count ) ),
+			esc_html__( 'سبد خرید', 'faucets-valves' ),
 			/* translators: %s: number of items */
-			esc_html( sprintf( __( '%s قلم', 'faucets-valves' ), number_format_i18n( $count ) ) ),
-			esc_html( number_format_i18n( $count ) )
+			esc_html( sprintf( __( '%s قلم', 'faucets-valves' ), number_format_i18n( $count ) ) )
 		);
 	}
 
@@ -119,7 +120,7 @@ function fv_cart_link( $class = 'icon-btn header-cart', $with_label = false ) {
 		esc_attr( $class ),
 		esc_url( wc_get_cart_url() ),
 		esc_attr( $label ),
-		fv_icon( 'bag' ),
+		fv_icon( 'basket' ),
 		$count ? '' : 'hidden',
 		esc_html( number_format_i18n( $count ) ),
 		$with_label ? '<span aria-hidden="true">' . esc_html__( 'سبد', 'faucets-valves' ) . '</span>' : ''
