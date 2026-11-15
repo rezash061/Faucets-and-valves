@@ -161,3 +161,15 @@
 	.drawers--compact .drawer b { font-size: 14px; line-height: 1.4; }
 	.drawers--compact .drawer__text > span { font-size: 12px; }
 }
+
+/* Search form (get_search_form: 404, widgets) — the header's product search, as one pill */
+.fv-search { display: flex; gap: 8px; width: min(520px, 100%); margin-inline: auto; }
+.fv-search__field { position: relative; flex: 1; display: flex; align-items: center; }
+.fv-search__field .icon { position: absolute; inset-inline-start: 18px; width: 18px; height: 18px; color: var(--c-ink-2); pointer-events: none; }
+.fv-search input[type="search"] {
+	width: 100%; min-height: 52px; padding-inline: 46px 20px; border-radius: 999px;
+	border: 1px solid transparent; background: var(--c-paper); box-shadow: var(--sh-1);
+}
+.fv-search input[type="search"]:focus { outline: none; border-color: var(--c-water-text); box-shadow: 0 0 0 3px rgb(31 95 150 / .22); }
+.fv-search .pill { height: 52px; padding-inline: 26px; flex: none; }
+.not-found .fv-search { margin-top: var(--s3); }

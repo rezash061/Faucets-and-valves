@@ -208,3 +208,11 @@ img.avatar { flex: none; width: 40px; height: 40px; border-radius: 50%; backgrou
 
 /* Numbers that must read left-to-right (codes, phone) */
 [dir="ltr"] { unicode-bidi: isolate; }
+/* Name and email side by side; everything else full width */
+@media (min-width: 640px) {
+	.comments .comment-form { display: grid; grid-template-columns: 1fr 1fr; column-gap: var(--s2); }
+	.comments .comment-form > * { grid-column: 1 / -1; }
+	.comments .comment-form > .comment-form-author { grid-column: 1; }
+	.comments .comment-form > .comment-form-email { grid-column: 2; }
+}
+.comments .comment-notes { color: var(--text-muted); font-size: var(--fs-xs); }

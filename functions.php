@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'FV_VERSION', '0.9.3' );
+define( 'FV_VERSION', '0.9.4' );
 define( 'FV_DIR', get_template_directory() );
 define( 'FV_URI', get_template_directory_uri() );
 
@@ -30,6 +30,7 @@ if ( class_exists( 'WooCommerce' ) ) {
 	require FV_DIR . '/inc/checkout.php';
 	require FV_DIR . '/inc/invoice.php';
 	require FV_DIR . '/inc/card-to-card.php';
+	require FV_DIR . '/inc/emails.php';
 	require FV_DIR . '/inc/account.php';
 	require FV_DIR . '/inc/quick-order.php';
 	require FV_DIR . '/inc/mini-cart.php';

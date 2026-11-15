@@ -15,6 +15,9 @@ $cats = get_the_category();
 			<?php
 			if ( has_post_thumbnail() ) {
 				the_post_thumbnail( 'medium_large', array( 'loading' => 'lazy', 'alt' => '' ) );
+			} else {
+				// No featured image: a single drop of water on the clay, so the card isn't an empty box.
+				echo '<svg class="post-card__ph" viewBox="0 0 48 64" aria-hidden="true"><path d="M24 4C24 4 6 26 6 40a18 18 0 0 0 36 0C42 26 24 4 24 4Z"/><path d="M15 42a9 9 0 0 0 9 9"/></svg>';
 			}
 			?>
 		</span>

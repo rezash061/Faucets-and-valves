@@ -85,6 +85,8 @@
 	transition: transform var(--dur) var(--ease-out), box-shadow var(--dur), background-color var(--dur);
 }
 .post-card__media { display: block; aspect-ratio: 3 / 2; overflow: hidden; border-radius: var(--r-1); background: var(--c-clay-shade); margin-bottom: 8px; }
+.post-card__media:has(.post-card__ph) { display: grid; place-items: center; background: linear-gradient(160deg, var(--c-clay-lit), var(--c-clay-shade)); }
+.post-card__ph { width: 34px; height: auto; fill: none; stroke: var(--c-water-text); stroke-width: 1.6; stroke-linecap: round; opacity: .55; }
 .post-card__media img { width: 100%; height: 100%; object-fit: cover; mix-blend-mode: multiply; transition: transform .9s var(--ease-out); }
 .post-card__meta, .post-card__title, .post-card__excerpt { padding-inline: 8px; }
 .post-card__meta { display: flex; gap: 10px; font-size: var(--fs-xs); color: var(--text-muted); }
