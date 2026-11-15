@@ -53,7 +53,7 @@ while ( have_posts() ) :
 								if ( $c['thumb_id'] ) {
 									echo wp_get_attachment_image( $c['thumb_id'], 'fv-tile', false, array( 'alt' => '', 'loading' => 'lazy' ) );
 								} else {
-									echo '<span class="catalog-card__blank surface--steel" aria-hidden="true"><b>PDF</b></span>';
+									echo '<span class="catalog-card__blank" aria-hidden="true"><b>PDF</b></span>';
 								}
 								?>
 							</span>

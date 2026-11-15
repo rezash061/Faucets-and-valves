@@ -95,6 +95,50 @@
 		Object.keys(map).forEach(function (id) { var el = document.getElementById(id); if (el) io.observe(el); });
 	}
 
+	/**
+	 * Product page "add to cart" without a page reload, so the mini cart opens as it does from a card.
+	 * Simple products and chosen variations only; anything WooCommerce refuses (or no AJAX support)
+	 * falls back to the normal form post, which shows WooCommerce's own notice.
+	 */
+	if (document.querySelector('form.cart')) {
+		document.addEventListener('submit', function (e) {
+			var params = window.wc_add_to_cart_params, $ = window.jQuery;
+			if (!$ || !params || !params.wc_ajax_url) return;
+			var form = e.target;
+			if (!form.matches || !form.matches('form.cart') || form.dataset.fvPlain) return;
+			if (!form.closest('.product-type-simple, .product-type-variable')) return;
+			var btn = form.querySelector('.single_add_to_cart_button');
+			if (!btn || btn.disabled || btn.classList.contains('disabled')) return;
+			var idField = form.querySelector('[name="add-to-cart"]');
+			var varField = form.querySelector('[name="variation_id"]');
+			var id = varField && +varField.value ? varField.value : (idField ? idField.value : '');
+			if (!id) return;
+			// Extra fields from other plugins (add-ons, uploads) need the normal form post.
+			var extra = Array.prototype.some.call(form.elements, function (f) {
+				return f.name && !/^(add-to-cart|quantity|variation_id|product_id|attribute_.+)$/.test(f.name);
+			});
+			if (extra) return;
+			e.preventDefault();
+
+			var data = { product_id: id, quantity: (form.querySelector('input.qty') || {}).value || 1 };
+			form.querySelectorAll('[name^="attribute_"]').forEach(function (f) { data[f.name] = f.value; });
+			var plain = function () { form.dataset.fvPlain = '1'; if (form.requestSubmit) form.requestSubmit(btn); else form.submit(); };
+
+			btn.classList.add('loading');
+			btn.setAttribute('aria-busy', 'true');
+			$.post(params.wc_ajax_url.toString().replace('%%endpoint%%', 'add_to_cart'), data)
+				.done(function (res) {
+					if (!res || res.error || !res.fragments) { plain(); return; }
+					$(document.body).trigger('added_to_cart', [res.fragments, res.cart_hash]);
+				})
+				.fail(plain)
+				.always(function () {
+					btn.classList.remove('loading');
+					btn.removeAttribute('aria-busy');
+				});
+		});
+	}
+
 	// Cart totals re-render with AJAX.
 	if (window.jQuery) {
 		window.jQuery(document.body).on('updated_wc_div updated_cart_totals', function () { init(); });

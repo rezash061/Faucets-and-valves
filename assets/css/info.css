@@ -1,13 +1,6 @@
 /* Info pages: about, contact, FAQ, policies. */
 
-/* Header: a plaster band (the house's ground) with the drawing title block */
-.page-hero {
-	position: relative; overflow: hidden; padding: var(--s6) 0; margin-bottom: var(--s6);
-	background: radial-gradient(ellipse 70% 90% at 35% 60%, var(--c-plaster-lit) 0%, var(--c-plaster) 70%);
-}
-.page-hero .container { position: relative; z-index: 2; }
-.page-hero__block { width: min(560px, 100%); }
-.page-hero__block h1 { font-size: clamp(30px, 3.6vw, 52px); }
+/* The page header (.page-hero) lives in components.css: other templates share it. */
 
 /* Layout: table of contents beside a clay sheet */
 .info-layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: var(--s6); align-items: start; padding-bottom: var(--section-y); }
@@ -34,9 +27,8 @@
 .info-sheet h2 { font-size: clamp(22px, 2vw, 28px); font-weight: 500; margin: var(--s5) 0 var(--s2); font-family: var(--font-sans); scroll-margin-top: calc(var(--header-h) + 24px); }
 .info-sheet h2:first-child { margin-top: 0; }
 .info-sheet h3 { font-family: var(--font-sans); font-size: 19px; margin-top: var(--s4); }
-.info-sheet table { width: 100%; border-collapse: separate; border-spacing: 0; border: 0; border-radius: var(--r-2); box-shadow: var(--sh-1); overflow: hidden; font-family: var(--font-sans); font-size: 15px; }
-.info-sheet th, .info-sheet td { padding: 10px 14px; border: 0; border-bottom: 1px solid rgb(29 35 38 / .22); text-align: start; }
-.info-sheet tr:last-child th, .info-sheet tr:last-child td { border-bottom: 0; }
+/* Tables use the shared .entry-content table (base.css); on the white sheet they sit on paper. */
+.info-sheet table { background: var(--c-paper); }
 .info-sheet th { background: var(--c-clay-shade); font-weight: 600; }
 
 /* FAQ: each question ends in a paper chip whose "+" turns into "−" */
@@ -104,6 +96,5 @@
 	.info-toc { position: static; }
 	.contact-card { position: static; }
 	.contact-form { grid-template-columns: 1fr; }
-	.page-hero { padding: var(--s4) 0; margin-bottom: var(--s4); }
 }
-.info-layout + .section { padding-top: 0; } /* about: numbers follow the sheet */
+.info-layout + .section:not(.section--plaster) { padding-top: 0; } /* about: a paper section follows the sheet directly */

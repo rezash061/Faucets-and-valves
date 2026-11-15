@@ -8,8 +8,23 @@
 defined( 'ABSPATH' ) || exit;
 
 get_header();
+
+if ( ! is_singular() ) {
+	if ( is_search() ) {
+		/* translators: %s: search query */
+		$fv_title = sprintf( __( 'نتایج جستجو برای «%s»', 'faucets-valves' ), get_search_query() );
+		$fv_lead  = '';
+	} elseif ( is_archive() ) {
+		$fv_title = wp_strip_all_tags( get_the_archive_title() );
+		$fv_lead  = wp_strip_all_tags( get_the_archive_description() );
+	} else {
+		$fv_title = __( 'مقالات و راهنماها', 'faucets-valves' );
+		$fv_lead  = __( 'راهنمای انتخاب، نصب و نگهداری شیرآلات برای خریداران و پیمانکاران.', 'faucets-valves' );
+	}
+	fv_page_head( array(), array( 'title' => $fv_title, 'lead' => $fv_lead ) );
+}
 ?>
-<div class="container page-wrap">
+<div class="container page-wrap<?php echo is_singular() ? '' : ' page-wrap--page'; ?>">
 	<?php if ( is_singular() ) : ?>
 		<?php
 		while ( have_posts() ) :
@@ -35,21 +50,6 @@ get_header();
 		endwhile;
 		?>
 	<?php else : ?>
-		<header class="page-header">
-			<h1 class="entry-title">
-				<?php
-				if ( is_search() ) {
-					/* translators: %s: search query */
-					printf( esc_html__( 'نتایج جستجو برای «%s»', 'faucets-valves' ), esc_html( get_search_query() ) );
-				} elseif ( is_archive() ) {
-					echo wp_kses_post( get_the_archive_title() );
-				} else {
-					esc_html_e( 'مقالات و راهنماها', 'faucets-valves' );
-				}
-				?>
-			</h1>
-		</header>
-
 		<?php if ( have_posts() ) : ?>
 			<ul class="post-grid" data-motion="stagger">
 				<?php
@@ -61,7 +61,11 @@ get_header();
 			</ul>
 			<?php the_posts_pagination(); ?>
 		<?php else : ?>
-			<p><?php esc_html_e( 'چیزی پیدا نشد.', 'faucets-valves' ); ?></p>
+			<div class="empty-state">
+				<p class="empty-state__title"><?php esc_html_e( 'چیزی پیدا نشد', 'faucets-valves' ); ?></p>
+				<p><?php esc_html_e( 'واژهٔ دیگری را امتحان کنید، یا نام و کد کالا را در محصولات جستجو کنید.', 'faucets-valves' ); ?></p>
+				<?php get_search_form(); ?>
+			</div>
 		<?php endif; ?>
 	<?php endif; ?>
 </div>

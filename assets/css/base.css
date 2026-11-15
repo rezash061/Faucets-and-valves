@@ -25,9 +25,11 @@ h1 { font-size: var(--fs-2xl); font-weight: 300; }
 h2 { font-size: var(--fs-xl); }
 h3 { font-size: var(--fs-lg); }
 p { margin: 0 0 var(--s2); }
-.entry-content, .term-description, .woocommerce-product-details__short-description, .woocommerce-Tabs-panel, .section__lead { font-family: var(--font-read); }
+.entry-content, .term-description, .woocommerce-product-details__short-description, .woocommerce-Tabs-panel { font-family: var(--font-read); }
 
 :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+/* Containers focused by script (main, WooCommerce notices) are never reached with Tab: no ring around them. */
+[tabindex="-1"]:focus { outline: none; }
 
 ::selection { background: var(--c-water); color: #fff; }
 
@@ -43,12 +45,75 @@ p { margin: 0 0 var(--s2); }
 }
 .skip-link.sr-only-focusable:focus { top: 16px; }
 
-/* Entry content */
+/* ---------- Entry content (block editor) ---------- */
 .entry-content { max-width: var(--content); }
-:where(.entry-content, .term-description) a:where(:not(.btn, .button, .pill, .link-more)) { color: var(--link); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
-.entry-content img { margin-block: var(--s3); border-radius: var(--r-2); }
-.entry-content table { width: 100%; border-collapse: collapse; }
-.entry-content th, .entry-content td { border-bottom: var(--hairline); padding: 12px 8px; text-align: start; }
+:where(.entry-content, .term-description, .comment-content) a:where(:not(.btn, .button, .pill, .link-more, .wp-block-button__link)) { color: var(--link); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+.entry-content img { border-radius: var(--r-2); }
+.entry-content > img, .entry-content > p > img { margin-block: var(--s3); }
+.entry-content h2, .entry-content h3, .entry-content h4 { font-family: var(--font-sans); }
+:where(.entry-content) :where(h2, h3, h4):not(:first-child) { margin-top: 1.6em; } /* low specificity: component headings keep their own spacing */
+.entry-content h4 { font-size: var(--fs-md); }
+/* Lists written in the editor only (zero specificity: WooCommerce and theme lists keep their own rules) */
+:where(.entry-content) :where(ul:not([class]), ol:not([class]), .wp-block-list) { padding-inline-start: 1.4em; margin: 0 0 var(--s2); }
+:where(.entry-content) :where(ul:not([class]), ol:not([class]), .wp-block-list) > li { margin-bottom: 4px; }
+:where(.entry-content) :where(ul:not([class]), ol:not([class]), .wp-block-list) > li::marker { color: var(--c-ink-2); }
+.entry-content :is(code, kbd) { font-family: var(--font-code); font-size: .9em; padding: 1px 6px; border-radius: 6px; background: var(--c-clay-shade); }
+.entry-content pre { padding: var(--s2) var(--s3); border-radius: var(--r-1); background: var(--c-clay-shade); font-family: var(--font-code); font-size: 14px; line-height: 1.7; overflow-x: auto; direction: ltr; text-align: left; }
+.entry-content pre code { padding: 0; background: none; font-size: inherit; }
+.entry-content figcaption, .entry-content .wp-element-caption { margin-top: var(--s1); font-family: var(--font-sans); font-size: var(--fs-sm); color: var(--c-ink-2); text-align: start; }
+.entry-content figure { margin: var(--s4) 0; }
+
+/* Tables: a soft panel with hairline rows (same as the specs table). WooCommerce's own tables keep their rules. */
+.entry-content .wp-block-table { overflow-x: auto; }
+.entry-content table:not(.shop_table, .variations, .group_table, .woocommerce-table, .specs-table) {
+	width: 100%; border-collapse: separate; border-spacing: 0; border: 0; border-radius: var(--r-2); overflow: hidden;
+	background: var(--c-clay-lit); box-shadow: var(--sh-1); font-family: var(--font-sans); font-size: 15px;
+}
+
+.entry-content table:not(.shop_table, .variations, .group_table, .woocommerce-table, .specs-table) :is(th, td) { padding: 12px 16px; border: 0; border-bottom: var(--hairline); text-align: start; vertical-align: top; }
+.entry-content table:not(.shop_table, .variations, .group_table, .woocommerce-table, .specs-table) tr:last-child > :is(th, td) { border-bottom: 0; }
+.entry-content table:not(.shop_table, .variations, .group_table, .woocommerce-table, .specs-table) thead :is(th, td) { background: var(--c-clay-shade); font-weight: 600; border-bottom: var(--hairline); }
+.entry-content .wp-block-table thead { border-bottom: 0; }
+.entry-content .wp-block-table tfoot { border-top: 0; }
+.entry-content .wp-block-table.is-style-stripes { border-bottom: 0; }
+.entry-content .wp-block-table.is-style-stripes tbody tr:nth-child(odd) { background: var(--c-clay); }
+.entry-content .wp-block-table.is-style-stripes :is(th, td) { border-color: transparent; }
+
+/* Quotes: a 1px leader line at the start, like the house labels */
+.entry-content blockquote, .entry-content .wp-block-quote {
+	margin: var(--s4) 0; padding: 0; padding-inline-start: var(--s3); border: 0; border-inline-start: 1px solid var(--c-ink);
+	font-size: var(--fs-md); color: var(--heading);
+}
+.entry-content blockquote p:last-of-type { margin-bottom: 0; }
+.entry-content blockquote cite, .entry-content .wp-block-pullquote cite { display: block; margin-top: var(--s1); font-family: var(--font-sans); font-size: var(--fs-sm); font-style: normal; color: var(--c-ink-2); }
+.entry-content .wp-block-pullquote {
+	margin: var(--s5) 0; padding: var(--s4) var(--s3); border: 0; border-radius: var(--r-2); background: var(--c-clay-lit); box-shadow: var(--sh-1); text-align: center;
+}
+.entry-content .wp-block-pullquote blockquote { margin: 0; padding: 0; border: 0; }
+.entry-content .wp-block-pullquote p { font-size: var(--fs-lg); line-height: 1.7; font-weight: 300; color: var(--heading); }
+
+/* Separators: a hairline; "dots" style keeps its dots in muted ink */
+.entry-content hr, .entry-content .wp-block-separator { height: 0; margin: var(--s5) auto; border: 0; border-top: var(--hairline); background: none; opacity: 1; color: var(--c-ink-2); }
+.entry-content .wp-block-separator:not(.is-style-wide):not(.is-style-dots) { max-width: 120px; }
+.entry-content .wp-block-separator.is-style-dots { border: 0; height: auto; line-height: 1; }
+.entry-content .wp-block-separator.is-style-dots::before { color: var(--c-ink-2); font-size: 20px; letter-spacing: 1.5em; padding-inline-start: 1.5em; }
+
+/* Buttons: the theme pills (ink fill; the outline style is the quiet pill) */
+.entry-content .wp-block-buttons { gap: var(--s1); margin-block: var(--s3); }
+.wp-block-button__link, .wp-element-button {
+	display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 28px;
+	border: 1px solid var(--c-ink); border-radius: var(--radius-pill); background: var(--c-ink); color: var(--c-paper);
+	font-family: var(--font-sans); font-size: 15px; font-weight: 500; line-height: 1.2; text-decoration: none;
+	transition: background-color var(--dur-fast), color var(--dur-fast), border-color var(--dur-fast);
+}
+.wp-block-button__link:hover { background: var(--c-ink-3); border-color: var(--c-ink-3); color: var(--c-paper); }
+.wp-block-button.is-style-outline > .wp-block-button__link { background: transparent; border-color: var(--field-border); color: var(--heading); }
+.wp-block-button.is-style-outline > .wp-block-button__link:hover { border-color: var(--c-ink); background: rgb(29 35 38 / .04); color: var(--heading); }
+
+/* Details: the FAQ row (hairline, +/− chip) */
+.entry-content .wp-block-details { margin-block: var(--s2); border-block: var(--hairline); }
+.entry-content .wp-block-details summary { min-height: 44px; padding-block: 10px; font-family: var(--font-sans); font-weight: 600; cursor: pointer; }
+.entry-content .wp-block-details[open] summary { color: var(--c-water-text); }
 
 /* Fields: a lit clay well with a thin ink edge; focus = water-blue ring */
 input[type="text"], input[type="email"], input[type="tel"], input[type="search"], input[type="number"],
@@ -62,7 +127,38 @@ input::placeholder, textarea::placeholder { color: #6B747C; opacity: 1; }
 input:focus, select:focus, textarea:focus { border-color: var(--c-water-text); outline: none; box-shadow: 0 0 0 3px rgb(31 95 150 / .22); }
 input:focus-visible, select:focus-visible, textarea:focus-visible { outline: none; }
 label { display: inline-block; margin-bottom: 6px; font-size: var(--fs-sm); }
-input[type="checkbox"], input[type="radio"] { accent-color: var(--c-ink); }
+input[type="checkbox"], input[type="radio"] { accent-color: var(--c-ink); width: 18px; height: 18px; vertical-align: middle; }
+/* File picker: a well with the quiet pill as its button */
+input[type="file"] {
+	width: 100%; max-width: 100%; min-height: 56px; padding: 6px; border-radius: var(--r-1);
+	background: var(--c-clay-shade); color: var(--c-ink-2); font-size: var(--fs-sm); cursor: pointer;
+}
+input[type="file"]::file-selector-button {
+	min-height: 44px; margin-inline-end: 12px; padding: 0 18px; border: 0; border-radius: var(--radius-pill);
+	background: var(--c-clay-lit); box-shadow: inset 0 0 0 1px var(--field-border); color: var(--c-ink);
+	font: 500 14px/1 var(--font-sans); cursor: pointer; transition: box-shadow var(--dur-fast);
+}
+input[type="file"]:hover::file-selector-button { box-shadow: inset 0 0 0 1px var(--c-ink); }
+input[type="file"]:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* Show-password eye (WooCommerce login, register, account forms) */
+.password-input { position: relative; display: block; }
+.password-input input { padding-inline-end: 52px; }
+.woocommerce form .show-password-input, .show-password-input {
+	position: absolute; top: 50%; left: auto; right: auto; inset-inline-end: 2px; width: 44px; height: 44px; margin-top: -22px; padding: 0;
+	border: 0; border-radius: 50%; background: none; color: var(--c-ink-2); cursor: pointer;
+}
+.show-password-input::before, .show-password-input::after { content: none; }
+.show-password-input::before {
+	content: ""; position: absolute; inset: 0; margin: auto; width: 20px; height: 20px; background: currentColor;
+	-webkit-mask: var(--eye) center / contain no-repeat; mask: var(--eye) center / contain no-repeat;
+	--eye: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.5'%3E%3Cpath d='M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E");
+}
+.show-password-input.display-password::before {
+	--eye: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.5'%3E%3Cpath d='M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Cpath d='M4 4l16 16'/%3E%3C/svg%3E");
+}
+.show-password-input:hover { color: var(--c-ink); background: rgb(29 35 38 / .06); }
+.show-password-input:focus-visible { outline-offset: -2px; }
 
 /* Label chip: the house's paper label (thin ink edge, water dot). Used sparingly. */
 .chip-label {
@@ -71,6 +167,44 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--c-ink); }
 	font-size: var(--fs-xs); font-weight: 500; color: var(--c-ink); line-height: 1.6;
 }
 .chip-label::before { content: ""; flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--c-water-text); }
+
+/* Empty state: a clay panel with a short line and a way forward */
+.empty-state { padding: var(--s6) var(--s4); text-align: center; border-radius: var(--r-2); background: var(--c-clay-lit); box-shadow: var(--sh-1); }
+.empty-state__title { margin: 0 0 var(--s1); font-size: var(--fs-lg); font-weight: 500; color: var(--heading); }
+.empty-state > p { margin: 0 auto; max-width: 52ch; color: var(--text-muted); font-family: var(--font-read); }
+.empty-state .search-form { margin-top: var(--s3); }
+
+/* ---------- Comments and product reviews: clay panels on a hairline list ---------- */
+.comment-list, .commentlist { list-style: none; margin: 0 0 var(--s5); padding: 0; display: grid; gap: var(--s2); }
+.comment-list .children { list-style: none; margin: var(--s2) 0 0; padding: 0; padding-inline-start: var(--s4); display: grid; gap: var(--s2); }
+.comment-body, .commentlist .comment_container { position: relative; padding: var(--s3); border-radius: var(--r-2); background: var(--c-clay-lit); box-shadow: var(--sh-1); }
+.comment-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin-bottom: var(--s1); font-size: var(--fs-sm); color: var(--text-muted); }
+.comment-author { display: flex; align-items: center; gap: 10px; color: var(--heading); }
+.comment-author .fn { font-style: normal; font-weight: 600; }
+.comment-author .says { display: none; }
+.comment-metadata a { color: var(--text-muted); }
+.comment-metadata a:hover { color: var(--heading); }
+img.avatar { flex: none; width: 40px; height: 40px; border-radius: 50%; background: var(--c-clay-shade); object-fit: cover; color: transparent; overflow: hidden; }
+.comment-content { font-family: var(--font-read); }
+.comment-content p:last-child { margin-bottom: 0; }
+.comment-awaiting-moderation { font-size: var(--fs-sm); color: var(--text-muted); }
+.reply { margin-top: var(--s1); }
+.comment-reply-link { display: inline-flex; align-items: center; min-height: 36px; padding: 0 14px; border-radius: var(--radius-pill); box-shadow: inset 0 0 0 1px var(--field-border); font-size: var(--fs-sm); color: var(--heading); }
+.comment-reply-link:hover { box-shadow: inset 0 0 0 1px var(--c-ink); }
+.comments__title, .comment-reply-title { font-size: var(--fs-xl); font-weight: 400; }
+.comment-respond { padding: clamp(20px, 3vw, 32px); border-radius: var(--r-2); background: var(--c-clay-lit); box-shadow: var(--sh-1); }
+.comment-respond .comment-reply-title { margin: 0 0 var(--s1); }
+.comment-respond .comment-reply-title small { margin-inline-start: 12px; font-size: var(--fs-sm); }
+.comment-respond .comment-reply-title small a { color: var(--link); text-decoration: underline; text-underline-offset: 3px; }
+.comment-notes, .logged-in-as { font-size: var(--fs-sm); color: var(--text-muted); }
+.logged-in-as a { color: var(--link); }
+.comment-form p { margin-bottom: var(--s2); }
+.comment-form label { display: block; }
+.comment-form .required { color: var(--c-danger); }
+.comment-form-cookies-consent { display: flex; align-items: center; gap: 10px; }
+.comment-form-cookies-consent label { display: inline; margin: 0; color: var(--text-muted); }
+.comment-form textarea { min-height: 140px; }
+.comment-form .form-submit { margin: var(--s3) 0 0; }
 
 /* Numbers that must read left-to-right (codes, phone) */
 [dir="ltr"] { unicode-bidi: isolate; }

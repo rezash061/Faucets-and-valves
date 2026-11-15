@@ -64,9 +64,12 @@ $account_url = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalin
 
 <div class="nav-drawer" id="nav-drawer" hidden>
 	<div class="nav-drawer__panel" role="dialog" aria-modal="true" aria-label="<?php esc_attr_e( 'منو', 'faucets-valves' ); ?>">
-		<button class="icon-btn nav-drawer__close" type="button" aria-label="<?php esc_attr_e( 'بستن منو', 'faucets-valves' ); ?>">
-			<?php echo fv_icon( 'close' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-		</button>
+		<div class="nav-drawer__head">
+			<?php fv_logo(); ?>
+			<button class="icon-btn nav-drawer__close" type="button" aria-label="<?php esc_attr_e( 'بستن منو', 'faucets-valves' ); ?>">
+				<?php echo fv_icon( 'close' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+			</button>
+		</div>
 		<?php
 		wp_nav_menu( array(
 			'theme_location' => 'primary',
@@ -75,7 +78,14 @@ $account_url = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalin
 			'depth'          => 2,
 			'fallback_cb'    => false,
 		) );
+		$fv_phone = fv_mod( 'fv_phone' );
 		?>
+		<div class="nav-drawer__foot">
+			<a class="btn" href="<?php echo esc_url( $account_url ); ?>"><?php echo fv_icon( 'user' ); // phpcs:ignore WordPress.Security.EscapeOutput ?><?php esc_html_e( 'حساب کاربری', 'faucets-valves' ); ?></a>
+			<?php if ( $fv_phone ) : ?>
+				<a class="btn" href="tel:<?php echo esc_attr( preg_replace( '/[^\d+]/', '', function_exists( 'fv_to_latin' ) ? fv_to_latin( $fv_phone ) : $fv_phone ) ); ?>"><?php echo fv_icon( 'phone' ); // phpcs:ignore WordPress.Security.EscapeOutput ?><span dir="ltr"><?php echo esc_html( $fv_phone ); ?></span></a>
+			<?php endif; ?>
+		</div>
 	</div>
 	<div class="nav-drawer__scrim" data-close></div>
 </div>

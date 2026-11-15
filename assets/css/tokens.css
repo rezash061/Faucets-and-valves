@@ -143,9 +143,8 @@
 .room-mech    { --tint: var(--room-mech);    --tint-deep: var(--room-mech-deep);    --tint-wash: var(--room-mech-wash); --tint-soft: var(--room-mech-soft); }
 .room-yard    { --tint: var(--room-yard);    --tint-deep: var(--room-yard-deep);    --tint-wash: var(--room-yard-wash); --tint-soft: var(--room-yard-soft); }
 
-/* Ink (dark) surface: only the "showroom" page template (named as dark in the editor) and the
-   classic image hero used when WooCommerce is off. Everything else is paper, clay and plaster. */
-.surface-showroom,
+/* Ink (dark) surface: only the classic image hero, used on the front page when WooCommerce is off,
+   where text sits on an arbitrary full-bleed photo. Every other screen is paper, clay and plaster. */
 .hero {
 	--bg: var(--c-ink);
 	--bg-raised: var(--c-ink-3);
@@ -158,21 +157,6 @@
 	--link: #9CC3DD;
 	--border: rgb(255 255 255 / .12);
 	--focus: #9CC3DD;
-}
-
-/* Light sections inside a dark showroom page switch back to paper */
-.section--catalog {
-	--bg: var(--c-paper);
-	--bg-raised: var(--c-clay-lit);
-	--bg-media: var(--c-clay-shade);
-	--text: var(--c-ink);
-	--text-muted: var(--c-ink-2);
-	--heading: var(--c-ink);
-	--accent: var(--c-water-text);
-	--accent-contrast: #FFFFFF;
-	--link: var(--c-water-text);
-	--border: var(--line-color);
-	--focus: var(--c-water-text);
 }
 
 /* Plaster surface: header, footer, nav drawer, page headers, plaster bands */

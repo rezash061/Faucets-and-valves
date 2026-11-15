@@ -274,26 +274,44 @@ add_action( 'wp_enqueue_scripts', function () {
 } );
 
 /**
- * Page header shared by the info templates: a plaster band with the drawing title block.
+ * Page header shared by the info templates, plain pages, the blog, search, 404 and the showroom
+ * template: a plaster band with the title card, optionally beside a rounded photo.
  *
  * @param array $cells Pairs of [label, value].
+ * @param array $args  Optional: 'title' (defaults to the post title), 'lead' (defaults to the excerpt),
+ *                     'image' (attachment ID shown beside the card).
  */
-function fv_page_head( $cells = array() ) {
-	$excerpt = has_excerpt() ? get_the_excerpt() : '';
+function fv_page_head( $cells = array(), $args = array() ) {
+	$in_loop = in_the_loop() || is_singular();
+	$title   = isset( $args['title'] ) ? $args['title'] : ( $in_loop ? get_the_title() : '' );
+	$lead    = isset( $args['lead'] ) ? $args['lead'] : ( $in_loop && has_excerpt() ? get_the_excerpt() : '' );
+	$image   = isset( $args['image'] ) ? (int) $args['image'] : 0;
 	?>
-	<header class="page-hero surface-plaster">
-		<div class="container">
+	<header class="page-hero surface-plaster<?php echo $image ? ' has-media' : ''; ?>">
+		<div class="container<?php echo $image ? ' page-hero__grid' : ''; ?>">
 			<div class="titleblock page-hero__block">
 				<div class="tb-main">
-					<h1><?php echo fv_split_words( get_the_title() ); // phpcs:ignore WordPress.Security.EscapeOutput ?></h1>
-					<?php if ( $excerpt ) : ?>
-						<p><?php echo esc_html( $excerpt ); ?></p>
+					<h1><?php echo fv_split_words( $title ); // phpcs:ignore WordPress.Security.EscapeOutput ?></h1>
+					<?php if ( $lead ) : ?>
+						<p><?php echo esc_html( $lead ); ?></p>
 					<?php endif; ?>
 				</div>
 				<?php foreach ( array_slice( $cells, 0, 3 ) as $c ) : ?>
 					<div class="tb-cell"><?php echo esc_html( $c[0] ); ?><b><?php echo esc_html( $c[1] ); ?></b></div>
 				<?php endforeach; ?>
 			</div>
+			<?php if ( $image ) : ?>
+				<figure class="page-hero__media">
+					<?php
+					echo wp_get_attachment_image( $image, 'large', false, array(
+						'alt'           => '',
+						'loading'       => 'eager',
+						'fetchpriority' => 'high',
+						'sizes'         => '(max-width: 900px) 100vw, 720px',
+					) );
+					?>
+				</figure>
+			<?php endif; ?>
 		</div>
 	</header>
 	<?php

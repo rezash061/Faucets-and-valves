@@ -14,18 +14,18 @@
 .btn:hover, .button:hover, .woocommerce a.button:hover, .woocommerce button.button:hover, .woocommerce input.button:hover {
 	border-color: var(--heading); background: rgb(29 35 38 / .04); color: var(--heading);
 }
-.btn--brass, .btn--primary, .button.alt, input[type="submit"],
+.btn--brass, .button.alt, input[type="submit"],
 .woocommerce a.button.alt, .woocommerce button.button.alt, .woocommerce input.button.alt {
 	background: var(--c-ink); border-color: var(--c-ink); color: var(--c-paper);
 }
-.btn--brass:hover, .btn--primary:hover, .button.alt:hover, input[type="submit"]:hover,
+.btn--brass:hover, .button.alt:hover, input[type="submit"]:hover,
 .woocommerce a.button.alt:hover, .woocommerce button.button.alt:hover, .woocommerce input.button.alt:hover {
 	background: var(--c-ink-3); border-color: var(--c-ink-3); color: var(--c-paper);
 }
 .woocommerce a.button.disabled, .woocommerce button.button:disabled, .woocommerce button.button:disabled[disabled],
 .woocommerce button.button.alt.disabled { opacity: .45; padding: 0 24px; }
 .btn--ghost { background: transparent; }
-.surface-showroom .btn--ghost, .hero .btn--ghost { border-color: rgb(242 241 236 / .35); }
+.hero .btn--ghost { border-color: rgb(242 241 236 / .35); }
 
 /* ---------- Sections ---------- */
 .section { padding-block: var(--section-y); background: var(--bg); color: var(--text); }
@@ -59,6 +59,25 @@
 .tb-cell { padding: 12px 24px 14px; border-top: var(--hairline); border-inline-start: var(--hairline); font-size: 12px; color: var(--c-ink-2); line-height: 1.5; }
 .tb-main + .tb-cell { border-inline-start: 0; }
 .tb-cell b { display: block; color: var(--c-ink); font-size: 14px; font-weight: 600; }
+
+/* ---------- Page header: a plaster band (the house's ground) holding the title card ----------
+   Info pages, plain pages, the blog, search, 404 and the showroom template (fv_page_head()). */
+.page-hero {
+	position: relative; overflow: hidden; padding: var(--s6) 0; margin-bottom: var(--s6);
+	background: radial-gradient(ellipse 70% 90% at 35% 60%, var(--c-plaster-lit) 0%, var(--c-plaster) 70%);
+}
+.page-hero .container { position: relative; z-index: 2; }
+.page-hero .breadcrumb { margin-bottom: var(--s3); }
+.page-hero__block { width: min(560px, 100%); }
+.page-hero__block h1 { font-size: clamp(30px, 3.6vw, 52px); }
+.page-hero__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: clamp(24px, 4vw, 64px); align-items: center; }
+.page-hero__media { margin: 0; aspect-ratio: 4 / 3; overflow: hidden; border-radius: var(--r-3); background: var(--c-clay-shade); box-shadow: var(--sh-2); }
+.page-hero__media img { width: 100%; height: 100%; object-fit: cover; }
+@media (max-width: 900px) {
+	.page-hero { padding: var(--s4) 0; margin-bottom: var(--s4); }
+	.page-hero__grid { grid-template-columns: minmax(0, 1fr); gap: var(--s3); }
+	.page-hero__media { order: -1; aspect-ratio: 16 / 10; }
+}
 
 /* ---------- Pill button (house room card, contact form) ---------- */
 .pill {
@@ -106,12 +125,11 @@
 	.drawers--compact { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
-/* ---------- Classic image hero (only without WooCommerce, and the showroom page template) ---------- */
+/* ---------- Classic image hero: only on the front page when WooCommerce is off (text over any photo needs the dark shade) ---------- */
 .hero {
 	position: relative; overflow: hidden; display: flex; align-items: flex-end;
 	min-height: max(640px, 100svh); background: var(--c-ink); color: var(--text);
 }
-.hero--slim { min-height: clamp(380px, 56svh, 560px); padding-top: var(--header-h); }
 .hero__mask { position: absolute; inset: 0; overflow: hidden; }
 .hero__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform-origin: 30% 50%; }
 .hero__img--placeholder { background: var(--c-ink); }
@@ -120,29 +138,14 @@
 	background: linear-gradient(to left, rgb(29 35 38 / .9) 0%, rgb(29 35 38 / .5) 45%, rgb(29 35 38 / .1) 100%);
 }
 .hero__content { position: relative; z-index: 2; width: 100%; padding-block: var(--s7) clamp(64px, 12vh, 128px); }
-.hero--slim .hero__content { padding-block: var(--s5); }
 .hero__eyebrow { margin: 0 0 var(--s3); color: var(--accent); font-size: var(--fs-sm); font-weight: 500; }
 .hero__title { margin: 0; color: var(--heading); font-weight: 200; font-size: var(--fs-hero); line-height: 1.25; max-width: 12ch; }
-.hero--slim .hero__title { font-size: var(--fs-3xl); max-width: 18ch; }
 .hero__title .w { display: inline-block; overflow: hidden; vertical-align: top; padding-block: .08em; margin-block: -.08em; }
 .hero__title .w > span { display: inline-block; }
 .hero__title strong { font-weight: 500; }
 .hero__sub { max-width: 46ch; margin: var(--s3) 0 var(--s5); font-size: clamp(16px, 1.3vw, 19px); }
-.hero--slim .hero__sub { margin-bottom: 0; }
 .hero__ctas { display: flex; flex-wrap: wrap; gap: var(--s2); }
 
-/* Legacy category tiles (kept for child themes; the front page uses room blocks) */
-.cat-tiles { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--s2); }
-.cat-tile { position: relative; display: block; color: var(--heading); border-radius: var(--r-2); overflow: hidden; box-shadow: var(--sh-1); background: var(--c-clay-lit); }
-.cat-tile__media { display: block; aspect-ratio: 3 / 4; background: var(--bg-media); }
-.cat-tile__media img { width: 100%; height: 100%; object-fit: cover; }
-.cat-tile__label { display: block; padding: var(--s2); }
-.cat-tile__label b { display: block; font-weight: 500; font-size: 18px; }
-.cat-tile__label span { font-size: var(--fs-xs); color: var(--text-muted); }
-
-@media (max-width: 1023px) {
-	.cat-tiles { grid-template-columns: repeat(2, 1fr); }
-}
 @media (max-width: 767px) {
 	.section-head { flex-direction: column; align-items: flex-start; gap: var(--s2); }
 	.hero__shade { background: linear-gradient(to top, rgb(29 35 38 / .95) 0%, rgb(29 35 38 / .75) 50%, rgb(29 35 38 / .2) 85%); }

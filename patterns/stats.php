@@ -3,15 +3,15 @@
  * Title: آمار — چهار عدد
  * Slug: faucets-valves/stats
  * Categories: faucets-valves
- * Description: نوار تیره با چهار عدد بزرگ که هنگام دیده شدن شمارش می‌شوند.
+ * Description: چهار عدد بزرگ در یک پنل سفید با خطوط جداکنندهٔ نازک، روی برگهٔ گچی.
  * Keywords: آمار, اعداد, stats
  *
  * @package FaucetsValves
  */
 
 ?>
-<!-- wp:group {"className":"fv-p fv-p-dark fv-p-stats","layout":{"type":"constrained","contentSize":"1440px"}} -->
-<div class="wp-block-group fv-p fv-p-dark fv-p-stats">
+<!-- wp:group {"className":"fv-p fv-p-band fv-p-stats","layout":{"type":"constrained","contentSize":"1440px"}} -->
+<div class="wp-block-group fv-p fv-p-band fv-p-stats">
 <!-- wp:columns -->
 <div class="wp-block-columns">
 <!-- wp:column -->

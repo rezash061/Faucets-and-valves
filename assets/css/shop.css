@@ -29,14 +29,6 @@
 
 .shop-drawers { margin-bottom: var(--s5); }
 
-/* Plain header (no title block) */
-.shop-head { margin-bottom: var(--s5); max-width: 70ch; }
-.shop-head__title { font-size: var(--fs-2xl); font-weight: 300; margin: 0 0 var(--s1); }
-.shop-head .term-description, .shop-head .page-description { color: var(--text-muted); }
-.shop-head .term-description p:last-child { margin: 0; }
-.hero--catalog { min-height: clamp(320px, 44svh, 460px); }
-.hero--catalog .hero__title { font-size: var(--fs-3xl); max-width: 16ch; }
-
 .shop-layout { display: grid; grid-template-columns: 272px minmax(0, 1fr); gap: var(--s5); align-items: start; }
 
 /* ---------- Filter panel: a clay panel ---------- */
@@ -163,5 +155,4 @@
 @media (max-width: 767px) {
 	.shop-toolbar__sort label { display: none; }
 	.shop-toolbar__sort select { min-width: 0; }
-	.hero--catalog { min-height: 300px; }
 }

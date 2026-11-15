@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'FV_VERSION', '0.8.1' );
+define( 'FV_VERSION', '0.9.0' );
 define( 'FV_DIR', get_template_directory() );
 define( 'FV_URI', get_template_directory_uri() );
 

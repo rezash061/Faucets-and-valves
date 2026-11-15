@@ -1,17 +1,17 @@
 <?php
 /**
- * Title: نوار دعوت به اقدام — تیره
+ * Title: نوار دعوت به اقدام
  * Slug: faucets-valves/cta-band
  * Categories: faucets-valves, call-to-action
- * Description: نوار تیرهٔ تمام‌عرض با عنوان، متن و دکمهٔ برنجی.
+ * Description: برگهٔ گچی گوشه‌گرد با عنوان، متن و دکمهٔ تیره (کپسولی).
  * Keywords: دکمه, تماس, cta
  *
  * @package FaucetsValves
  */
 
 ?>
-<!-- wp:group {"className":"fv-p fv-p-dark fv-p-cta","layout":{"type":"constrained","contentSize":"1440px"}} -->
-<div class="wp-block-group fv-p fv-p-dark fv-p-cta">
+<!-- wp:group {"className":"fv-p fv-p-band fv-p-cta","layout":{"type":"constrained","contentSize":"1440px"}} -->
+<div class="wp-block-group fv-p fv-p-band fv-p-cta">
 <!-- wp:heading {"level":2,"className":"fv-display"} -->
 <h2 class="wp-block-heading fv-display">برای پروژهٔ بعدی‌تان پیش‌فاکتور بگیرید</h2>
 <!-- /wp:heading -->
@@ -19,8 +19,8 @@
 <p>فهرست کالاها را به سبد اضافه کنید و پیش‌فاکتور رسمی را همان‌جا دریافت کنید.</p>
 <!-- /wp:paragraph -->
 <!-- wp:buttons -->
-<div class="wp-block-buttons"><!-- wp:button {"className":"fv-btn-brass"} -->
-<div class="wp-block-button fv-btn-brass"><a class="wp-block-button__link wp-element-button" href="/shop/">مشاهدهٔ محصولات</a></div>
+<div class="wp-block-buttons"><!-- wp:button -->
+<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="/shop/">مشاهدهٔ محصولات</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 </div>

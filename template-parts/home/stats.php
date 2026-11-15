@@ -25,7 +25,7 @@ if ( ! $stats ) {
 	return;
 }
 ?>
-<section class="section stats" aria-label="<?php esc_attr_e( 'به زبان اعداد', 'faucets-valves' ); ?>">
+<section class="section section--plaster stats" aria-label="<?php esc_attr_e( 'به زبان اعداد', 'faucets-valves' ); ?>">
 	<div class="container">
 		<ul class="stats__list" data-motion="stagger">
 			<?php foreach ( $stats as $stat ) : ?>

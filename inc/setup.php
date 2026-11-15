@@ -20,7 +20,7 @@ add_action( 'after_setup_theme', function () {
 		'flex-height' => true,
 		'flex-width'  => true,
 	) );
-	add_post_type_support( 'page', 'excerpt' ); // Used as the showroom hero subtitle.
+	add_post_type_support( 'page', 'excerpt' ); // Used as the lead line in page headers.
 	add_theme_support( 'editor-styles' );
 	add_editor_style( array( 'assets/css/tokens.css', 'assets/css/base.css' ) );
 
@@ -70,7 +70,8 @@ add_filter( 'body_class', function ( $classes ) {
 } );
 
 /**
- * Ink (dark) surface: the showroom page template. Everything else, the front page included, is paper.
+ * Showroom page template (wide content from the block patterns). Its body class, surface-showroom,
+ * is kept as a styling hook; every surface, this one included, is the light paper/clay/plaster system.
  */
 function fv_is_showroom() {
 	$showroom = is_page_template( 'page-templates/showroom.php' );

@@ -2,8 +2,6 @@
 
 .site-main { overflow-x: clip; }
 .page-lead { font-size: var(--fs-md); color: var(--text-muted); max-width: 60ch; margin: 0; }
-.hero--slim { padding-top: 0; }
-.has-overlay-header .hero--slim { padding-top: var(--header-h); }
 
 /* ---------- Metal surfaces (real finish samples; used small) ---------- */
 .surface--chrome { background: linear-gradient(100deg, #5c626a 0%, #c9cdd2 18%, #ffffff 30%, #8d939b 46%, #e9ecef 62%, #9aa0a8 78%, #f5f6f7 90%, #6b7178 100%); }
@@ -114,8 +112,6 @@
 .article__tags a { display: inline-flex; align-items: center; min-height: 36px; padding: 0 14px; border-radius: var(--radius-pill); box-shadow: inset 0 0 0 1px var(--field-border); font-size: var(--fs-sm); color: var(--text-muted); }
 .article__tags a:hover { color: var(--heading); box-shadow: inset 0 0 0 1px var(--c-ink); }
 .article__comments { max-width: calc(var(--content) + 2 * var(--gutter)); padding-bottom: var(--section-y); }
-/* Dark image header, kept for the showroom template */
-.hero--article .hero__title { font-size: clamp(30px, 4.4vw, 56px); max-width: 22ch; }
 
 /* ---------- Catalogs page ---------- */
 .chips { display: flex; flex-wrap: wrap; gap: var(--s1); margin-bottom: var(--s4); }
@@ -136,7 +132,7 @@
 .catalog-card__cover { aspect-ratio: 3 / 4; overflow: hidden; border-radius: var(--r-1); background: var(--c-clay-shade); }
 .catalog-card__cover img { width: 100%; height: 100%; object-fit: cover; }
 .catalog-card__blank { display: grid; place-items: center; width: 100%; height: 100%; }
-.catalog-card__blank b { font-size: 28px; font-weight: 200; color: var(--c-ink-2); }
+.catalog-card__blank b { padding: 4px 14px; border-radius: var(--r-1); background: var(--c-clay-lit); box-shadow: var(--sh-1); font-size: 13px; font-weight: 600; color: var(--c-ink-2); }
 .catalog-card__body { display: flex; flex-direction: column; gap: 2px; padding: var(--s2) 6px 0; flex: 1; }
 .catalog-card__brand { font-size: var(--fs-xs); color: var(--text-muted); font-weight: 500; }
 .catalog-card__title { font-size: var(--fs-md); font-weight: 500; color: var(--heading); line-height: 1.6; }
@@ -146,40 +142,47 @@
 .catalog-card__dl .icon { width: 18px; height: 18px; color: var(--c-ink); }
 .catalog-card__size { font-size: var(--fs-xs); color: var(--text-muted); direction: ltr; }
 
-/* ---------- Brand archive header ---------- */
-.shop-head--brand { display: grid; grid-template-columns: auto 1fr; column-gap: var(--s4); align-items: center; max-width: none; }
-.shop-head__logo { grid-row: span 2; display: grid; place-items: center; width: 160px; height: 120px; border-radius: var(--r-2); background: var(--c-clay-lit); box-shadow: var(--sh-1); padding: var(--s2); }
-.shop-head__logo img { max-height: 88px; width: auto; object-fit: contain; }
-
-/* ---------- Showroom pages: wide content + block patterns ---------- */
+/* ---------- Showroom template + block patterns (about-intro, stats, values, cta-band) ----------
+   Patterns work in any content column: the band is a rounded plaster sheet, not a full-bleed strip,
+   so it lines up whether the column is centred, start-aligned or wide. `fv-p-dark` is the band's old
+   class name, kept so content saved with it renders the same (it is no longer dark). */
+.page-wrap--showroom { padding-top: 0; }
 .entry-content--showroom { max-width: none; }
 .entry-content--showroom > *:not(.fv-p):not(.alignfull):not(.alignwide) { max-width: var(--content); }
-.fv-p { margin-block: var(--section-y); }
-.fv-p-dark { margin-inline: calc(50% - 50vw); padding: var(--section-y) calc(50vw - 50%); background: var(--c-plaster); color: var(--c-ink); }
-.fv-p-dark h2, .fv-p-dark h3 { color: var(--c-ink); }
-.surface-showroom .fv-p-dark { background: var(--c-ink); color: var(--c-steel-300); }
-.surface-showroom .fv-p-dark h2, .surface-showroom .fv-p-dark h3 { color: var(--c-paper); }
-.fv-eyebrow { display: inline-flex; align-items: center; gap: 8px; color: var(--text-muted); font-size: var(--fs-sm); font-weight: 500; }
+.fv-p { margin-block: clamp(48px, 7vw, 96px); }
+.fv-p:first-child { margin-top: 0; }
+.fv-p-band, .fv-p-dark {
+	padding: clamp(32px, 6vw, 80px) clamp(20px, 5vw, 72px); border-radius: var(--r-3); color: var(--c-ink);
+	background: radial-gradient(ellipse 70% 90% at 35% 60%, var(--c-plaster-lit) 0%, var(--c-plaster) 70%);
+	--text-muted: var(--c-ink-2); --heading: var(--c-ink);
+}
+.fv-p-band :is(h2, h3), .fv-p-dark :is(h2, h3) { color: var(--c-ink); }
+.fv-p-band > :last-child, .fv-p-dark > :last-child { margin-bottom: 0; }
+.fv-eyebrow { display: inline-flex; align-items: center; gap: 8px; color: var(--text-muted); font-family: var(--font-sans); font-size: var(--fs-sm); font-weight: 500; }
 .fv-eyebrow::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--c-water-text); }
 .fv-display { font-size: clamp(28px, 3.4vw, 44px) !important; font-weight: 300 !important; line-height: 1.35; }
 .fv-p-split .wp-block-columns { gap: clamp(32px, 6vw, 96px); }
-.fv-p-split .wp-block-image img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: var(--bg-media); border-radius: var(--r-3); }
-.fv-p-split .wp-block-image:has(img:not([src])) { aspect-ratio: 4 / 3; background: var(--bg-media); border-radius: var(--r-3); }
-.fv-p-stats .wp-block-columns { gap: 0; background: var(--c-clay-lit); border-radius: var(--r-2); box-shadow: var(--sh-1); overflow: hidden; }
+.fv-p-split .wp-block-image { margin: 0; }
+.fv-p-split .wp-block-image img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; margin: 0; background: var(--c-clay-shade); border-radius: var(--r-3); box-shadow: var(--sh-1); }
+/* WordPress drops an image block that has no picture yet: let the text take the whole row */
+.fv-p-split .wp-block-column:not(:has(*)) { display: none; }
+/* Numbers: the same soft panel as the home stats */
+.fv-p-stats .wp-block-columns { gap: 0; margin: 0; background: var(--c-clay-lit); border-radius: var(--r-2); box-shadow: var(--sh-1); overflow: hidden; }
 .fv-p-stats .wp-block-column { padding: var(--s3); border-inline-start: var(--hairline); }
 .fv-p-stats .wp-block-column:first-child { border-inline-start: 0; }
-.surface-showroom .fv-p-stats .wp-block-columns, .surface-showroom .fv-p-stats .wp-block-column { border-color: rgb(255 255 255 / .2); }
-.fv-stat-value { font-size: clamp(36px, 4.4vw, 60px); font-weight: 200; line-height: 1.1; color: inherit; margin-bottom: var(--s1); }
-.fv-stat-label { color: var(--text-muted); font-size: var(--fs-sm); margin: 0; }
-.fv-p-values .wp-block-columns { gap: var(--s4); margin-top: var(--s5); }
-.fv-value { border-top: var(--line-ink); padding-top: var(--s3); }
-.fv-value-num { font-size: var(--fs-sm); color: var(--text-muted); font-weight: 600; }
+.fv-stat-value { margin: 0 0 var(--s1); font-family: var(--font-sans); font-size: clamp(32px, 3.6vw, 52px); font-weight: 200; line-height: 1.15; color: var(--heading); white-space: nowrap; }
+.fv-stat-label { margin: 0; padding-top: var(--s1); border-top: var(--hairline); font-family: var(--font-sans); font-size: var(--fs-sm); color: var(--text-muted); }
+/* Values: clay cards; the number is a small label with the water dot */
+.fv-p-values .wp-block-columns { gap: var(--s2); margin-top: var(--s4); }
+.fv-value { padding: var(--s3); border-radius: var(--r-2); background: var(--c-clay-lit); box-shadow: var(--sh-1); }
+.fv-value h3 { margin: var(--s1) 0; font-family: var(--font-sans); font-size: var(--fs-lg); }
+.fv-value p:last-child { margin-bottom: 0; color: var(--text-muted); }
+.fv-value-num { display: inline-flex; align-items: center; gap: 8px; margin: 0; font-family: var(--font-sans); font-size: var(--fs-sm); font-weight: 600; color: var(--text-muted); }
+.fv-value-num::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--c-water-text); }
 .fv-p-cta { text-align: center; }
-.fv-p-cta > * { margin-inline: auto; }
-.fv-p-cta .wp-block-buttons { justify-content: center; margin-top: var(--s4); }
-.entry-content .wp-block-button__link { text-decoration: none; }
-.fv-btn-brass .wp-block-button__link { background: var(--c-ink); color: var(--c-paper); border-radius: var(--radius-pill); padding: 14px 32px; font-weight: 500; }
-.fv-btn-brass .wp-block-button__link:hover { background: var(--c-ink-3); }
+.fv-p-cta > * { margin-inline: auto; max-width: 40ch; }
+.fv-p-cta p:not(.fv-display) { color: var(--c-ink-2); }
+.fv-p-cta .wp-block-buttons { justify-content: center; max-width: none; margin-top: var(--s3); }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 1023px) {
@@ -196,15 +199,20 @@
 @media (max-width: 767px) {
 	.finish-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 	.finish-tile { padding: var(--s3) var(--s1) var(--s2); }
+	/* An odd last tile spans the row (sample beside its label) instead of standing alone */
+	.finish-tiles > li:last-child:nth-child(odd) { grid-column: 1 / -1; }
+	.finish-tiles > li:last-child:nth-child(odd) .finish-tile { flex-direction: row; justify-content: center; gap: var(--s3); padding: var(--s2) var(--s3); text-align: start; }
+	.finish-tiles > li:last-child:nth-child(odd) .finish-tile__sample { width: 56px; }
 	.brand-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 	.brand-tile { min-height: 104px; }
 	.catalog-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 	.post-grid { grid-template-columns: minmax(0, 1fr); }
 	.stat { padding: var(--s2); }
 	.stat__value { font-size: 36px; }
-	.shop-head--brand { grid-template-columns: 1fr; }
-	.shop-head__logo { grid-row: auto; margin-bottom: var(--s2); }
-	.fv-p-stats .wp-block-column { border-inline-start: 0; }
+	.fv-p-stats .wp-block-columns { display: grid; grid-template-columns: 1fr 1fr; }
+	.fv-p-stats .wp-block-column:nth-child(odd) { border-inline-start: 0; }
+	.fv-p-stats .wp-block-column:nth-child(n+3) { border-top: var(--hairline); }
+	.fv-stat-value { font-size: 32px; }
 	.article__content { font-size: 16px; }
 	.article__figure { aspect-ratio: 4 / 3; }
 }

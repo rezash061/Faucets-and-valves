@@ -19,19 +19,26 @@
 	// Search panel (header button and mobile bar button share it).
 	var panel = document.getElementById('header-search');
 	var toggles = document.querySelectorAll('.search-toggle');
-	function setSearch(open) {
+	var searchOpener = null;
+	function setSearch(open, opener) {
 		if (!panel) return;
 		panel.hidden = !open;
 		toggles.forEach(function (t) { t.setAttribute('aria-expanded', String(open)); });
 		header.classList.toggle('search-open', open);
 		if (open) {
+			searchOpener = opener || document.activeElement;
 			header.classList.add('is-solid');
 			var input = panel.querySelector('input[type="search"]');
 			if (input) input.focus();
+		} else {
+			if (header.dataset.overlay === 'true') header.classList.toggle('is-solid', window.scrollY > 40);
+			// Back to the button that opened it, if focus was still inside the panel.
+			if (searchOpener && document.contains(searchOpener) && (!document.activeElement || document.activeElement === document.body || panel.contains(document.activeElement))) searchOpener.focus();
+			searchOpener = null;
 		}
 	}
 	toggles.forEach(function (t) {
-		t.addEventListener('click', function () { setSearch(panel.hidden); });
+		t.addEventListener('click', function () { setSearch(panel.hidden, t); });
 	});
 
 	// Mobile drawer.
