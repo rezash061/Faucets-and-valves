@@ -15,18 +15,12 @@ get_header();
 while ( have_posts() ) :
 	the_post();
 	?>
+	<?php
+	fv_page_head( array(), array(
+		'lead' => has_excerpt() ? get_the_excerpt() : __( 'کالاها را با نام یا کد پیدا کنید، تعداد را وارد کنید و همه را یک‌جا به سبد اضافه کنید.', 'faucets-valves' ),
+	) );
+	?>
 	<div class="container page-wrap quick-order">
-		<header class="page-header">
-			<h1 class="entry-title"><?php the_title(); ?></h1>
-			<p class="page-lead">
-				<?php
-				echo has_excerpt()
-					? esc_html( get_the_excerpt() )
-					: esc_html__( 'کالاها را با نام یا کد پیدا کنید، تعداد را وارد کنید و همه را یک‌جا به سبد اضافه کنید.', 'faucets-valves' );
-				?>
-			</p>
-		</header>
-
 		<?php if ( '' !== trim( get_the_content() ) ) : ?>
 			<div class="entry-content"><?php the_content(); ?></div>
 		<?php endif; ?>

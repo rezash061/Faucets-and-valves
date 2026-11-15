@@ -79,7 +79,7 @@ function fv_card_to_card_box( $order_id ) {
 
 		<div class="c2c__amount">
 			<span class="c2c__label"><?php esc_html_e( 'مبلغ قابل واریز', 'faucets-valves' ); ?></span>
-			<span class="c2c__value"><?php echo esc_html( fv_money( $amount ) ); ?> <small><?php echo esc_html( $cur ); ?></small></span>
+			<span class="c2c__value"><?php echo esc_html( number_format( round( (float) $amount, wc_get_price_decimals() ), wc_get_price_decimals(), '.', ',' ) ); ?> <small><?php echo esc_html( $cur ); ?></small></span>
 			<button type="button" class="c2c__copy" data-copy="<?php echo esc_attr( $amount ); ?>"><?php esc_html_e( 'کپی مبلغ', 'faucets-valves' ); ?></button>
 			<span class="c2c__ref">
 				<?php
@@ -89,6 +89,7 @@ function fv_card_to_card_box( $order_id ) {
 			</span>
 		</div>
 
+		<div class="c2c__body">
 		<?php if ( $accounts ) : ?>
 			<div class="c2c__cards">
 				<?php foreach ( $accounts as $a ) : ?>
@@ -140,14 +141,19 @@ function fv_card_to_card_box( $order_id ) {
 				</p>
 				<p class="form-row form-row-wide">
 					<label for="fv_receipt_file"><?php esc_html_e( 'تصویر رسید (اختیاری؛ JPG، PNG یا PDF تا ۵ مگابایت)', 'faucets-valves' ); ?></label>
-					<input type="file" id="fv_receipt_file" name="fv_receipt_file" accept=".jpg,.jpeg,.png,.webp,.pdf">
+					<span class="file-pick">
+						<input type="file" id="fv_receipt_file" name="fv_receipt_file" accept=".jpg,.jpeg,.png,.webp,.pdf" class="file-pick__input">
+						<span class="file-pick__btn" aria-hidden="true"><?php echo fv_icon( 'document' ); // phpcs:ignore ?><?php esc_html_e( 'انتخاب فایل', 'faucets-valves' ); ?></span>
+						<span class="file-pick__name" aria-hidden="true" data-empty="<?php esc_attr_e( 'فایلی انتخاب نشده', 'faucets-valves' ); ?>"><?php esc_html_e( 'فایلی انتخاب نشده', 'faucets-valves' ); ?></span>
+					</span>
 				</p>
 				<input type="hidden" name="fv_order" value="<?php echo esc_attr( $order->get_id() ); ?>">
 				<input type="hidden" name="fv_key" value="<?php echo esc_attr( $order->get_order_key() ); ?>">
 				<?php wp_nonce_field( 'fv_receipt_' . $order->get_id(), 'fv_receipt_nonce' ); ?>
-				<button type="submit" class="btn btn--brass" name="fv_receipt_submit" value="1"><?php esc_html_e( 'ثبت رسید', 'faucets-valves' ); ?></button>
+				<button type="submit" class="pill" name="fv_receipt_submit" value="1"><?php esc_html_e( 'ثبت رسید', 'faucets-valves' ); ?></button>
 			</form>
 		<?php endif; ?>
+		</div>
 	</section>
 	<?php
 }

@@ -16,6 +16,15 @@
 		}, 600);
 	});
 
+	// Receipt file picker: show the chosen file's name in place of the browser's own (English) text.
+	document.addEventListener('change', function (e) {
+		var input = e.target;
+		if (!input.classList || !input.classList.contains('file-pick__input')) return;
+		var name = input.closest('.file-pick').querySelector('.file-pick__name');
+		name.textContent = input.files && input.files.length ? input.files[0].name : name.getAttribute('data-empty');
+		input.closest('.file-pick').classList.toggle('has-file', !!(input.files && input.files.length));
+	});
+
 	// Copy buttons.
 	document.addEventListener('click', function (e) {
 		var btn = e.target.closest('[data-copy]');

@@ -108,10 +108,26 @@ add_filter( 'woocommerce_default_address_fields', function ( $fields ) {
 		$fields[ $key ]['class']    = array( $class );
 	}
 	$fields['address_1']['placeholder'] = __( 'خیابان، کوچه، پلاک، واحد', 'faucets-valves' );
-	$fields['postcode']['required']     = false;
-	$fields['company']['required']      = false;
+	$fields['postcode']['required'] = false;
+	if ( isset( $fields['company'] ) ) { // Absent when WooCommerce › Settings › Checkout hides it.
+		$fields['company']['required'] = false;
+		$fields['company']['class']    = array( 'form-row-wide' );
+	}
 	return $fields;
 }, 20 );
+
+// WooCommerce's own rules for Iran move state/city/address around in the browser; align them with
+// the order above so the two-column rows stay paired (state | city, then the full address).
+add_filter( 'woocommerce_get_country_locale', function ( $locale ) {
+	$locale['IR'] = array_merge( $locale['IR'] ?? array(), array(
+		'state'     => array( 'priority' => 70 ),
+		'city'      => array( 'priority' => 80 ),
+		'address_1' => array( 'priority' => 90 ),
+		'address_2' => array( 'priority' => 95, 'hidden' => true, 'required' => false ),
+		'postcode'  => array( 'priority' => 100, 'required' => false ),
+	) );
+	return $locale;
+} );
 
 add_filter( 'woocommerce_billing_fields', function ( $fields ) {
 	if ( isset( $fields['billing_phone'] ) ) {
@@ -132,7 +148,7 @@ add_filter( 'woocommerce_billing_fields', function ( $fields ) {
 	$fields['billing_fv_national_id'] = array(
 		'label'             => __( 'شناسه ملی / کد اقتصادی', 'faucets-valves' ),
 		'required'          => false,
-		'priority'          => 55,
+		'priority'          => 105,
 		'class'             => array( 'form-row-last' ),
 		'custom_attributes' => array( 'dir' => 'ltr', 'inputmode' => 'numeric' ),
 		'description'       => __( 'برای فاکتور رسمی شرکت‌ها', 'faucets-valves' ),
@@ -205,6 +221,8 @@ add_filter( 'woocommerce_product_cross_sells_products_heading', function () {
 	return __( 'شاید به این‌ها هم نیاز داشته باشید', 'faucets-valves' );
 } );
 remove_action( 'woocommerce_cart_collaterals', 'woocommerce_cross_sell_display' );
+// The empty cart page (woocommerce/cart/cart-empty.php) has its own heading instead of this notice.
+remove_action( 'woocommerce_cart_is_empty', 'wc_empty_cart_message', 10 );
 add_action( 'woocommerce_after_cart', 'woocommerce_cross_sell_display' );
 
 /* ---------- Assets ---------- */

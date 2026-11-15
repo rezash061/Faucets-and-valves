@@ -72,8 +72,7 @@
 .fv-roomcard .fv-roomcard__hint { font-size: 13px; margin-top: 10px; }
 .fv-roomcard__row { display: flex; gap: 10px; margin-top: 16px; }
 .fv-roomcard .pill { height: 48px; padding-inline: 22px; font-size: 14px; flex: 1; }
-.pill--ghost { background: none; color: var(--c-ink); box-shadow: inset 0 0 0 1px var(--c-ink); flex: none !important; }
-.pill--ghost:hover { background: var(--c-ink); color: var(--c-paper); }
+.fv-roomcard .pill--ghost { flex: none; }
 
 /* Header over the scene */
 .has-overlay-header .site-header:not(.is-solid) { background: transparent; }

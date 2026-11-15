@@ -22,6 +22,19 @@ if ( 0 !== strpos( get_locale(), 'fa' ) ) {
 	}, 10, 2 );
 }
 
+// The privacy notes under checkout and registration are saved as settings in English on install,
+// so translation never reaches them. Swap them only while they are still WooCommerce's defaults.
+add_filter( 'woocommerce_get_privacy_policy_text', function ( $text, $type ) {
+	$defaults = array(
+		'checkout'     => array( 'Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our [privacy_policy].', 'اطلاعات شما فقط برای انجام سفارش و پشتیبانی استفاده می‌شود؛ جزئیات در [privacy_policy] آمده است.' ),
+		'registration' => array( 'Your personal data will be used to support your experience throughout this website, to manage access to your account, and for other purposes described in our [privacy_policy].', 'اطلاعات شما فقط برای مدیریت حساب کاربری و پشتیبانی استفاده می‌شود؛ جزئیات در [privacy_policy] آمده است.' ),
+	);
+	if ( isset( $defaults[ $type ] ) && trim( $text ) === $defaults[ $type ][0] ) {
+		return $defaults[ $type ][1];
+	}
+	return $text;
+}, 10, 2 );
+
 /**
  * @param string $translation Current translation.
  * @param string $text        Original English text.
@@ -53,7 +66,7 @@ function fv_wc_strings( $translation, $text ) {
 			'Product'                                       => 'محصول',
 			'Price'                                         => 'قیمت',
 			'Quantity'                                      => 'تعداد',
-			'Proceed to checkout'                           => 'ادامهٔ خرید',
+			'Proceed to checkout'                           => 'تسویه حساب',
 			'Place order'                                   => 'ثبت سفارش',
 			'Update cart'                                   => 'به‌روزرسانی سبد',
 			'Apply coupon'                                  => 'اعمال کد',
@@ -112,6 +125,16 @@ function fv_wc_strings( $translation, $text ) {
 			'(optional)'                                    => '(اختیاری)',
 			'required'                                      => 'الزامی',
 			'optional'                                      => 'اختیاری',
+			'Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our %s.' => 'اطلاعات شما فقط برای انجام سفارش و پشتیبانی استفاده می‌شود؛ جزئیات در %s آمده است.',
+			'Your personal data will be used to support your experience throughout this website, to manage access to your account, and for other purposes described in our %s.' => 'اطلاعات شما فقط برای مدیریت حساب کاربری و پشتیبانی استفاده می‌شود؛ جزئیات در %s آمده است.',
+			'privacy policy'                                => 'سیاست حفظ حریم خصوصی',
+			'Notes about your order, e.g. special notes for delivery.' => 'مثلاً ساعت تحویل یا توضیح برای باربری',
+			'A link to set a new password will be sent to your email address.' => 'پیوند ساختن رمز عبور به ایمیل شما فرستاده می‌شود.',
+			'Your cart is currently empty!'                 => 'سبد خرید شما خالی است.',
+			'New in store'                                  => 'تازه‌ها',
+			'Lost your password? Please enter your username or email address. You will receive a link to create a new password via email.' => 'نام کاربری یا ایمیل خود را وارد کنید تا پیوند ساختن رمز تازه برایتان فرستاده شود.',
+			'Reset password'                                => 'بازیابی رمز عبور',
+			'Username or email'                             => 'نام کاربری یا ایمیل',
 			'View'                                          => 'مشاهده',
 			'Pay'                                           => 'پرداخت',
 			'Cancel'                                        => 'لغو',
