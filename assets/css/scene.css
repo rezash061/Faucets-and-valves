@@ -74,11 +74,27 @@
 .fv-roomcard .pill { height: 48px; padding-inline: 22px; font-size: 14px; flex: 1; }
 .fv-roomcard .pill--ghost { flex: none; }
 
+/* Back out of a room: floats under the header, start side */
+.fv-house__back {
+	position: absolute; z-index: 5; top: calc(var(--header-h) + 14px); inset-inline-start: var(--gutter);
+	display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 18px 0 14px;
+	border: 0; border-radius: 999px; background: var(--c-paper); color: var(--c-ink);
+	box-shadow: var(--sh-2); font: inherit; font-size: 14px; cursor: pointer;
+	animation: fv-back-in .4s var(--ease-out) .25s both;
+}
+.fv-house__back[hidden] { display: none; }
+.fv-house__back .icon { width: 18px; height: 18px; transform: scaleX(-1); } /* points to the start side: back */
+.fv-house__back:hover { background: var(--c-ink); color: var(--c-paper); }
+.fv-house__back:focus-visible { outline: 2px solid var(--c-water-text); outline-offset: 3px; }
+@keyframes fv-back-in { from { opacity: 0; transform: translateY(-8px); } }
+
 /* Header over the scene */
 .has-overlay-header .site-header:not(.is-solid) { background: transparent; }
 
 @media (max-width: 1023px) {
-	.fv-house.is-3d { height: calc(100svh - var(--mobile-bar-h)); min-height: 560px; }
+	/* Ends above the bottom bar, whatever else takes height (safe area, admin toolbar) */
+	.fv-house.is-3d { height: calc(100svh - var(--mobile-bar-h) - env(safe-area-inset-bottom) - var(--fv-adminbar, 0px)); min-height: 460px; }
+	.admin-bar { --fv-adminbar: 32px; }
 }
 @media (max-width: 900px) {
 	.fv-house.is-3d .titleblock { left: 12px; right: 12px; bottom: 12px; width: auto; }
@@ -87,6 +103,8 @@
 	.fv-house.is-3d .fv-roomcard { left: 12px; right: 12px; bottom: 12px; width: auto; padding: 14px; }
 	.fv-roomcard h2 { font-size: 24px; }
 	.fv-roomcard .fv-roomcard__hint { display: none; }
+	.fv-roomcard .fv-roomcard__back { display: none; } /* the floating back button does this on phones */
+	.fv-house__back { top: calc(var(--header-h) + 8px); inset-inline-start: 12px; height: 40px; }
 	.fv-house.is-3d .rlabel { padding: 3px 6px; }
 	.fv-house.is-3d .rlabel b { font-size: 13px; }
 	.fv-house.is-3d .rlabel span { display: none; }
@@ -95,4 +113,5 @@
 	.spot small { display: none; }
 	.spot span { padding: 5px 10px; }
 }
-@media (prefers-reduced-motion: reduce) { .spot i::after { animation: none; } }
+@media (max-width: 782px) { .admin-bar { --fv-adminbar: 46px; } }
+@media (prefers-reduced-motion: reduce) { .spot i::after, .fv-house__back { animation: none; } }

@@ -23,6 +23,7 @@ function init(sec) {
 	const labels = [...sec.querySelectorAll('.rlabel')];
 	const spotsEl = $('.fv-spots', sec);
 	const card = $('.fv-roomcard', sec);
+	const backBtn = $('.fv-house__back', sec);
 	const house = createHouse(canvas, {
 		rooms: D.rooms.map((r) => ({ key: r.key, room: r.room })),
 		onPick: (key) => pick(key),
@@ -65,12 +66,27 @@ function init(sec) {
 	});
 
 	let lastFocus = null;
+	let fromHistory = false;
+	function close() {
+		if (history.state && history.state.fvRoom) history.back(); // popstate does the rest
+		else pick(null);
+	}
+	window.addEventListener('popstate', (e) => {
+		fromHistory = true;
+		pick(e.state && e.state.fvRoom ? e.state.fvRoom : null);
+		fromHistory = false;
+	});
 	function pick(key) {
 		key = key && roomOf[key] ? String(key) : null;
 		if (key === house.selected) return;
 		if (key && !house.selected) lastFocus = document.activeElement;
+		const was = house.selected;
 		house.select(key);
 		sec.classList.toggle('is-room', !!key);
+		// A history entry per visit, so the phone's back gesture zooms out instead of leaving.
+		if (key && !was && !fromHistory) history.pushState({ fvRoom: key }, '');
+		else if (key && was) history.replaceState({ fvRoom: key }, '');
+		backBtn.hidden = !key;
 		labels.forEach((l) => l.setAttribute('aria-expanded', l.dataset.key === key ? 'true' : 'false'));
 		spots.forEach((s) => { const on = s.key === key; s.el.classList.toggle('is-on', on); s.el.tabIndex = on ? 0 : -1; });
 		if (key) {
@@ -80,7 +96,7 @@ function init(sec) {
 			$('.fv-roomcard__all', card).href = data.url;
 			card.hidden = false;
 			requestAnimationFrame(() => card.classList.add('is-open'));
-			setTimeout(() => $('.fv-roomcard__back', card).focus({ preventScroll: true }), 60);
+			setTimeout(() => { const b = $('.fv-roomcard__back', card); if (b.offsetParent) b.focus({ preventScroll: true }); }, 60);
 		} else {
 			card.classList.remove('is-open');
 			setTimeout(() => { if (!house.selected) card.hidden = true; }, 500);
@@ -92,8 +108,9 @@ function init(sec) {
 		if (!l || e.metaKey || e.ctrlKey || e.shiftKey) return; // let new-tab clicks through
 		e.preventDefault(); pick(l.dataset.key);
 	});
-	$('.fv-roomcard__back', card).addEventListener('click', () => pick(null));
-	document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && house.selected) pick(null); });
+	$('.fv-roomcard__back', card).addEventListener('click', close);
+	backBtn.addEventListener('click', close);
+	document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && house.selected) close(); });
 
 	if (!reduce && gsap) {
 		house.intro();

@@ -31,6 +31,11 @@ if ( ! $rooms ) {
 	</ul>
 	<div class="fv-spots"></div>
 
+	<button class="fv-house__back" type="button" hidden>
+		<?php echo fv_icon( 'arrow', 'flip' ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG. ?>
+		<span><?php esc_html_e( 'بازگشت', 'faucets-valves' ); ?></span>
+	</button>
+
 	<div class="titleblock">
 		<div class="tb-main">
 			<h1 id="fv-scene-title"><?php echo fv_split_words( fv_mod( 'fv_scene_title' ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped inside. ?></h1>
